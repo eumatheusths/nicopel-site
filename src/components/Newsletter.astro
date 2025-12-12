@@ -1,0 +1,40 @@
+---
+// src/components/Newsletter.astro
+---
+
+<section class="py-20 bg-[#B8E900] relative overflow-hidden">
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-10">
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-black rounded-full mix-blend-overlay filter blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-4xl px-4 relative z-10 text-center">
+    
+    <h2 class="text-3xl md:text-4xl font-extrabold text-black mb-4">
+      Receba novidades e ofertas exclusivas.
+    </h2>
+    <p class="text-black/70 text-lg mb-8 max-w-2xl mx-auto font-medium">
+      Cadastre-se para receber tendências do mercado de embalagens, dicas de gestão e promoções relâmpago da Nicopel.
+    </p>
+
+    <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onsubmit="event.preventDefault(); alert('Obrigado por se inscrever! (Demo)');">
+      <input 
+        type="email" 
+        placeholder="Digite seu melhor e-mail" 
+        required
+        class="flex-1 px-6 py-4 rounded-xl border-none outline-none focus:ring-4 focus:ring-black/20 text-gray-900 placeholder-gray-500 shadow-xl"
+      />
+      <button 
+        type="submit" 
+        class="px-8 py-4 bg-black text-white font-bold rounded-xl hover:bg-gray-900 hover:scale-105 transition-all shadow-xl whitespace-nowrap"
+      >
+        Inscrever-se
+      </button>
+    </form>
+    
+    <p class="text-xs text-black/50 mt-4">
+      Não enviamos spam. Você pode cancelar a qualquer momento.
+    </p>
+
+  </div>
+</section>

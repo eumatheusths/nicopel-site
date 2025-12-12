@@ -1,0 +1,44 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+
+// Componentes da Home
+import Hero from '../components/Hero.astro';
+import FeaturesBreak from '../components/FeaturesBreak.astro';
+import Institutional from '../components/Institutional.astro';
+// IMPORT NOVO:
+import ProductsShowcase from '../components/ProductsShowcase.astro'; 
+import Clients from '../components/Clients.astro';
+import Sustainability from '../components/Sustainability.astro';
+import ContactSection from '../components/ContactSection.astro';
+import BlogSection from '../components/BlogSection.astro';
+import Newsletter from '../components/Newsletter.astro';
+import ExitPopup from '../components/ExitPopup.astro';
+---
+
+<Layout title="Nicopel Embalagens - Soluções em Embalagens Personalizadas">
+  
+  <ExitPopup />
+
+  <main>
+    <Hero />
+
+    <FeaturesBreak />
+
+    <Institutional />
+
+    <ProductsShowcase />
+
+    <Clients />
+
+    <Sustainability />
+
+    <ContactSection />
+    
+    <BlogSection />
+
+    <Newsletter />
+
+  </main>
+
+</Layout>

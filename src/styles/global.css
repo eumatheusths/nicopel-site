@@ -1,0 +1,14 @@
+/* src/styles/global.css */
+
+/* Mantém as diretivas do Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mantém apenas a configuração da fonte */
+html {
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* REMOVEMOS O @APPLY DAQUI PARA EVITAR O ERRO */

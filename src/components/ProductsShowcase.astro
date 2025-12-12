@@ -1,0 +1,40 @@
+---
+// src/components/ProductsShowcase.astro
+---
+
+<section class="relative w-full h-[720px] flex items-center justify-center overflow-hidden" id="produtos-em-cena">
+  
+  <div class="absolute inset-0 z-0">
+     <img 
+        src="/produtos-background.jpg" 
+        alt="Linha completa de embalagens Nicopel" 
+        class="w-full h-full object-cover"
+     />
+     <div class="absolute inset-0 bg-black/10"></div>
+  </div>
+
+  <div class="relative z-10 text-center px-4 animate-fade-in-up -mt-32 md:-mt-48">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#B8E900]/20 border border-[#B8E900]/40 text-sm font-bold text-gray-500 mb-6 backdrop-blur-md shadow-lg">
+          <span class="w-2 h-2 rounded-full bg-[#B8E900] animate-pulse"></span>
+          PORTFÓLIO COMPLETO
+      </div>
+
+      <h2 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-tight drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] mb-8">
+        Nossos <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E900] to-[#8bb300]">Produtos.</span>
+      </h2>
+      
+      <a href="/produtos" class="inline-flex items-center px-8 py-4 bg-[#B8E900] text-black font-bold rounded-full hover:bg-[#a3cf00] hover:scale-105 transition-all shadow-lg hover:shadow-[#B8E900]/40">
+        Explorar Catálogo
+        <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+
+  </div>
+
+</section>
+
+<style>
+  /* Estilos adicionais */
+</style>

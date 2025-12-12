@@ -1,0 +1,77 @@
+---
+// src/components/Clients.astro
+
+// Lista de 11 clientes
+const clients = [
+  { name: 'Cliente 01', logo: '/logo-cliente-1.png' },
+  { name: 'Cliente 02', logo: '/logo-cliente-2.png' },
+  { name: 'Cliente 03', logo: '/logo-cliente-3.png' },
+  { name: 'Cliente 04', logo: '/logo-cliente-4.png' },
+  { name: 'Cliente 05', logo: '/logo-cliente-5.png' },
+  { name: 'Cliente 06', logo: '/logo-cliente-6.png' },
+  { name: 'Cliente 07', logo: '/logo-cliente-7.png' },
+  { name: 'Cliente 08', logo: '/logo-cliente-8.png' },
+  { name: 'Cliente 09', logo: '/logo-cliente-9.png' },
+  { name: 'Cliente 10', logo: '/logo-cliente-10.png' },
+  { name: 'Cliente 11', logo: '/logo-cliente-11.png' },
+];
+---
+
+<section class="py-16 bg-white border-b border-gray-100">
+  <div class="mx-auto max-w-7xl px-4 mb-10 text-center">
+    <p class="text-lg font-medium text-gray-500 uppercase tracking-widest">
+      Empresas que confiam na Nicopel
+    </p>
+  </div>
+
+  <div class="relative m-auto w-full overflow-hidden bg-white">
+    
+    <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
+    <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
+
+    <div class="slider-track flex w-[calc(200px*22)]"> 
+      
+      {clients.map((client) => (
+        <div class="slide flex h-[140px] w-[200px] items-center justify-center px-4">
+          <img 
+            src={client.logo} 
+            alt={client.name} 
+            class="max-h-24 w-auto object-contain opacity-50 grayscale transition-all duration-300 hover:grayscale-0 hover:opacity-100 hover:scale-110 cursor-pointer"
+          />
+        </div>
+      ))}
+
+      {/* Duplicata para o efeito infinito */}
+      {clients.map((client) => (
+        <div class="slide flex h-[140px] w-[200px] items-center justify-center px-4">
+          <img 
+            src={client.logo} 
+            alt={client.name} 
+            class="max-h-24 w-auto object-contain opacity-50 grayscale transition-all duration-300 hover:grayscale-0 hover:opacity-100 hover:scale-110 cursor-pointer"
+          />
+        </div>
+      ))}
+
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* Movemos apenas a largura dos 11 itens originais (200px * 11) */
+      transform: translateX(calc(-200px * 11));
+    }
+  }
+
+  .slider-track {
+    animation: scroll 40s linear infinite; 
+  }
+
+  .slider-track:hover {
+    animation-play-state: paused;
+  }
+</style>

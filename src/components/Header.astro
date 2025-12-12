@@ -1,0 +1,168 @@
+---
+// src/components/Header.astro
+
+// Detecta se é a Home OU a página de História (para manter transparente no topo)
+const pathname = Astro.url.pathname;
+
+// ALTERAÇÃO AQUI: Adicionei " || pathname === '/historia'"
+const isHome = pathname === '/' || pathname === '' || pathname === '/historia';
+
+const links = [
+  { name: "Início", href: "/" },
+  { name: "Nossa História", href: "/historia" },
+  { name: "Produtos", href: "/produtos" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contato", href: "#contato" },
+];
+---
+
+<header 
+  id="main-header" 
+  data-is-home={isHome ? "true" : "false"}
+  class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-4"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between rounded-2xl px-6 py-3 transition-all duration-300 backdrop-blur-sm" id="header-container">
+      
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center gap-2">
+            <img 
+              src={isHome ? "/logo-nicopel.png" : "/logo nicopel preto.png"} 
+              alt="Nicopel Logo" 
+              class="h-10 w-auto object-contain transition-all" 
+              id="header-logo" 
+            />
+        </a>
+      </div>
+
+      <nav class="hidden md:flex gap-8 items-center">
+        {links.map((link) => (
+          <a 
+            href={link.href} 
+            class:list={[
+              "nav-link text-sm font-bold transition-colors drop-shadow-sm",
+              isHome ? "text-white hover:text-[#B8E900]" : "text-gray-900 hover:text-[#B8E900]"
+            ]}
+          >
+            {link.name}
+          </a>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <a 
+          href="https://api.whatsapp.com/message/KB4JJZXMVMWXP1?autoload=1&app_absent=0" 
+          target="_blank"
+          class="hidden md:inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-white transition-all duration-200 bg-gray-800 border border-gray-700 rounded-full hover:bg-gray-700 hover:scale-105 shadow-sm"
+        >
+          Orçamento
+        </a>
+
+        <button 
+          id="mobile-menu-btn" 
+          aria-label="Abrir menu" 
+          class:list={[
+            "md:hidden focus:outline-none transition-colors p-2 drop-shadow-sm",
+            isHome ? "text-white hover:text-[#B8E900]" : "text-gray-900 hover:text-[#B8E900]"
+          ]}
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+    <button id="close-mobile-menu" aria-label="Fechar menu" class="absolute top-6 right-6 text-gray-500 hover:text-red-500 p-2">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    
+    {links.map((link) => (
+        <a href={link.href} class="mobile-nav-link text-2xl font-bold text-gray-900 hover:text-[#B8E900]">
+            {link.name}
+        </a>
+    ))}
+
+    <a href="https://api.whatsapp.com/message/KB4JJZXMVMWXP1?autoload=1&app_absent=0" target="_blank" class="mobile-nav-link px-8 py-3 text-lg font-bold text-white bg-gray-900 rounded-full shadow-lg">
+        Solicitar Orçamento
+    </a>
+  </div>
+</header>
+
+<script is:inline>
+  // O script continua idêntico, pois a lógica de "isHome" já é tratada no HTML gerado acima
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.getElementById('main-header');
+    const container = document.getElementById('header-container');
+    const logo = document.getElementById('header-logo');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('close-mobile-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+    // A variável isHome agora será TRUE também na página de história
+    const isHome = header.dataset.isHome === 'true';
+
+    function openMenu() { mobileMenu.classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
+    function closeMenu() { mobileMenu.classList.add('translate-x-full'); document.body.style.overflow = ''; }
+    
+    if (menuBtn) menuBtn.addEventListener('click', openMenu);
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        // SCROLL: Fica tudo claro (menu branco, letras escuras)
+        header.classList.remove('py-4');
+        header.classList.add('py-2');
+        container.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-lg');
+        container.classList.remove('backdrop-blur-sm');
+        
+        logo.src = "/logo nicopel preto.png"; 
+        
+        navLinks.forEach(link => {
+            link.classList.remove('text-white', 'text-gray-900');
+            link.classList.add('text-gray-700');
+        });
+        if(mobileMenuBtn) {
+            mobileMenuBtn.classList.remove('text-white', 'text-gray-900');
+            mobileMenuBtn.classList.add('text-gray-900');
+        }
+
+      } else {
+        // TOPO: Volta ao estado original
+        header.classList.add('py-4');
+        header.classList.remove('py-2');
+        container.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-lg');
+        container.classList.add('backdrop-blur-sm');
+
+        if (isHome) {
+            // Se for Home ou História, volta a ser transparente com letra branca
+            logo.src = "/logo-nicopel.png"; 
+            navLinks.forEach(link => {
+                link.classList.add('text-white');
+                link.classList.remove('text-gray-700', 'text-gray-900');
+            });
+            if(mobileMenuBtn) {
+                mobileMenuBtn.classList.add('text-white');
+                mobileMenuBtn.classList.remove('text-gray-900');
+            }
+        } else {
+            // Outras páginas (ex: Produtos), volta a ser texto escuro
+            logo.src = "/logo nicopel preto.png"; 
+            navLinks.forEach(link => {
+                link.classList.remove('text-white', 'text-gray-700');
+                link.classList.add('text-gray-900');
+            });
+            if(mobileMenuBtn) {
+                mobileMenuBtn.classList.remove('text-white');
+                mobileMenuBtn.classList.add('text-gray-900');
+            }
+        }
+      }
+    });
+  });
+</script>

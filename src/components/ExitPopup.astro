@@ -1,0 +1,95 @@
+---
+// src/components/ExitPopup.astro
+---
+
+<div id="exit-popup" class="fixed inset-0 z-50 hidden items-center justify-center">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="popup-backdrop"></div>
+
+  <div class="relative w-full max-w-lg transform scale-95 opacity-0 transition-all duration-300 bg-white rounded-3xl shadow-2xl overflow-hidden m-4" id="popup-modal">
+    
+    <button id="close-popup" class="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+    <div class="flex flex-col md:flex-row">
+      <div class="hidden md:block w-1/3 bg-[#B8E900] relative overflow-hidden">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-16 h-16 text-black/20" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01C17.18 3.03 14.69 2 12.04 2z"/></svg>
+        </div>
+      </div>
+
+      <div class="w-full md:w-2/3 p-8 text-center md:text-left">
+        <span class="text-[#2E7D32] text-xs font-bold uppercase tracking-wider mb-2 block">Espere! Não vá ainda</span>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Quer um orçamento exclusivo?</h3>
+        <p class="text-gray-600 text-sm mb-6">
+          Fale diretamente com nosso consultor no WhatsApp e garanta condições especiais para o seu primeiro pedido.
+        </p>
+
+        <a href="https://wa.me/5500000000000" target="_blank" class="flex items-center justify-center w-full bg-[#25D366] text-white font-bold py-3 px-6 rounded-xl hover:bg-[#1ebd59] transition-transform hover:scale-105 shadow-lg shadow-green-200">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01C17.18 3.03 14.69 2 12.04 2zM12.05 20.21c-1.48 0-2.93-.4-4.21-1.15l-.3-.18-3.11.82.83-3.04-.19-.31c-.82-1.33-1.25-2.88-1.25-4.45 0-4.63 3.77-8.4 8.4-8.4 2.24 0 4.35.87 5.94 2.46 1.59 1.59 2.47 3.7 2.47 5.94 0 4.63-3.77 8.41-8.39 8.41z"/></svg>
+          Chamar no WhatsApp
+        </a>
+        <p class="text-[10px] text-gray-400 mt-3 text-center">Atendimento rápido em horário comercial.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  // Elementos
+  const popup = document.getElementById('exit-popup');
+  const backdrop = document.getElementById('popup-backdrop');
+  const modal = document.getElementById('popup-modal');
+  const closeBtn = document.getElementById('close-popup');
+  
+  // Chave do LocalStorage (Para saber se já foi fechado antes)
+  // DICA: Para testar várias vezes, apague essa chave do navegador ou use aba anônima
+  const STORAGE_KEY = 'nicopel_popup_viewed';
+
+  function showPopup() {
+    // Verifica se já foi mostrado/fechado antes para não irritar o usuário
+    if (localStorage.getItem(STORAGE_KEY) === 'true') return;
+
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+    
+    // Animação suave de entrada
+    setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        modal.classList.remove('opacity-0', 'scale-95');
+        modal.classList.add('opacity-100', 'scale-100');
+    }, 10);
+    
+    // Marca como visto assim que abre (ou você pode marcar apenas no hidePopup)
+    localStorage.setItem(STORAGE_KEY, 'true');
+  }
+
+  function hidePopup() {
+    // Animação de saída
+    backdrop.classList.add('opacity-0');
+    modal.classList.remove('opacity-100', 'scale-100');
+    modal.classList.add('opacity-0', 'scale-95');
+
+    setTimeout(() => {
+        popup.classList.add('hidden');
+        popup.classList.remove('flex');
+    }, 300);
+  }
+
+  // GATILHO 1: Intenção de Saída (Mouse sai da janela por cima)
+  document.addEventListener('mouseleave', (e) => {
+    if (e.clientY < 0) {
+      showPopup();
+    }
+  });
+
+  // GATILHO 2: Tempo (Fallback para mobile ou usuários que ficam muito tempo)
+  // 5 Minutos = 5 * 60 * 1000 = 300000ms
+  setTimeout(() => {
+    showPopup();
+  }, 300000);
+
+  // Eventos de Fechamento
+  closeBtn.addEventListener('click', hidePopup);
+  backdrop.addEventListener('click', hidePopup); // Fecha se clicar fora do modal
+</script>

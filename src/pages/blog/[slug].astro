@@ -1,0 +1,60 @@
+---
+// src/pages/blog/[slug].astro
+import Layout from '../../layouts/Layout.astro';
+import { blogPosts } from '../../data/blogPosts';
+
+export async function getStaticPaths() {
+  return blogPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<Layout title={`${post.title} - Blog Nicopel`}>
+  
+  <main class="pt-24 pb-16">
+    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-12">
+            <span class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider text-black uppercase bg-[#B8E900] rounded-full">
+                {post.category}
+            </span>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                {post.title}
+            </h1>
+            <div class="flex items-center justify-center text-gray-500 text-sm">
+                <span>Por Equipe Nicopel</span>
+                <span class="mx-2">•</span>
+                <time>{post.date}</time>
+            </div>
+        </div>
+
+        <div class="relative w-full h-[300px] md:h-[500px] bg-gray-100 rounded-3xl overflow-hidden mb-12 shadow-2xl">
+             <img 
+                src={post.image} 
+                alt={post.title} 
+                class="absolute inset-0 w-full h-full object-cover" 
+             />
+             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+             <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+                 <p class="text-white/90 text-base md:text-lg italic border-l-4 border-[#B8E900] pl-4 max-w-2xl">
+                    "{post.excerpt}"
+                 </p>
+             </div>
+        </div>
+
+        <div class="prose prose-lg prose-gray mx-auto max-w-3xl text-gray-700 leading-relaxed">
+            <Fragment set:html={post.content} />
+        </div>
+
+        <div class="mt-16 pt-8 border-t border-gray-200 text-center">
+            <a href="/blog" class="inline-flex items-center text-gray-900 font-bold hover:text-[#B8E900] transition-colors">
+                Voltar para o Blog
+            </a>
+        </div>
+    </article>
+  </main>
+</Layout>
