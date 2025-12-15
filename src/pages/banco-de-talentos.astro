@@ -1,85 +1,123 @@
 ---
 // src/pages/banco-de-talentos.astro
 import Layout from '../layouts/Layout.astro';
+
+// Dados de Contato do RH (Substitua pelos reais se tiver)
+const contatoRH = {
+  whatsapp: "554333330000", // Apenas números
+  whatsappDisplay: "(43) 3333-0000",
+  email: "rh@nicopel.com.br"
+};
 ---
 
 <Layout title="Banco de Talentos - Nicopel">
-  <main class="bg-black min-h-screen pt-24 pb-12 px-4 relative overflow-hidden">
+  <main class="min-h-screen pt-24 pb-12 px-4 relative overflow-hidden bg-[#f8f9fa]">
     
-    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-[#B8E900]/10 rounded-full blur-[120px] pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] pointer-events-none"></div>
+    <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#B8E900]/20 rounded-full blur-[120px] pointer-events-none mix-blend-multiply"></div>
+    <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply"></div>
 
-    <div class="max-w-4xl mx-auto relative z-10">
+    <div class="max-w-3xl mx-auto relative z-10">
       
-      <div class="text-center mb-12">
-        <span class="text-[#B8E900] font-bold tracking-widest text-sm uppercase mb-3 block">Carreiras</span>
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">
-          Faça parte do nosso <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E900] to-green-500">time de sucesso.</span>
+      <div class="text-center mb-8">
+        <span class="text-[#8bb300] font-bold tracking-widest text-sm uppercase mb-3 block">Carreiras</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+          Faça parte do nosso time.
         </h1>
-        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-          Estamos sempre em busca de profissionais apaixonados por qualidade e inovação. Envie seu currículo e entre para o nosso banco de talentos.
+        <p class="text-gray-600 text-base max-w-xl mx-auto">
+          Envie seu currículo e entre para o nosso banco de talentos.
         </p>
       </div>
 
-      <div class="bg-[#111] border border-gray-800 rounded-3xl p-8 md:p-12 shadow-2xl">
-        <form id="cvForm" class="space-y-6">
-          
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
-              <label for="nome" class="block text-sm font-bold text-gray-300 mb-2">Nome Completo</label>
-              <input type="text" id="nome" name="nome" required class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="Seu nome" />
-            </div>
+      <div class="bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl shadow-xl overflow-hidden">
+        
+        <div class="relative h-48 md:h-64 overflow-hidden">
+            <img 
+                src="/faixada-nicopel.jpg" 
+                alt="Fachada Nicopel" 
+                class="w-full h-full object-cover"
+                onerror="this.style.display='none'; this.parentElement.classList.add('bg-gray-200', 'flex', 'items-center', 'justify-center'); this.parentElement.innerHTML='<span class=\'text-gray-400\'>Imagem da Fachada</span>'"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent"></div>
+        </div>
+
+        <div class="p-8 md:p-10">
+            <form id="cvForm" class="space-y-5">
             
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                <label for="nome" class="block text-sm font-bold text-gray-700 mb-2">Nome Completo</label>
+                <input type="text" id="nome" name="nome" required class="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] focus:bg-white outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="Seu nome" />
+                </div>
+                
+                <div>
+                <label for="email" class="block text-sm font-bold text-gray-700 mb-2">E-mail</label>
+                <input type="email" id="email" name="email" required class="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] focus:bg-white outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="seu@email.com" />
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                <label for="telefone" class="block text-sm font-bold text-gray-700 mb-2">WhatsApp / Telefone</label>
+                <input type="tel" id="telefone" name="telefone" required class="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] focus:bg-white outline-none transition-all placeholder-gray-400 shadow-sm" placeholder="(00) 00000-0000" />
+                </div>
+
+                <div>
+                <label for="vaga" class="block text-sm font-bold text-gray-700 mb-2">Área de Interesse</label>
+                <select id="vaga" name="vaga" class="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] focus:bg-white outline-none transition-all shadow-sm appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-13%205.4A17.6%2017.6%200%200%200%200%2087.2c0%205%201.8%209.3%205.4%2013l128%20127.7c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%20100.3c3.6-3.6%205.4-7.8%205.4-12.8%200-5-1.8-9.3-5.4-13z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto;">
+                    <option value="Produção">Produção / Fábrica</option>
+                    <option value="Administrativo">Administrativo / RH</option>
+                    <option value="Comercial">Vendas / Comercial</option>
+                    <option value="Design">Design / Pré-impressão</option>
+                    <option value="Logistica">Logística / Expedição</option>
+                    <option value="Outros">Outros</option>
+                </select>
+                </div>
+            </div>
+
             <div>
-              <label for="email" class="block text-sm font-bold text-gray-300 mb-2">E-mail</label>
-              <input type="email" id="email" name="email" required class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="seu@email.com" />
+                <label class="block text-sm font-bold text-gray-700 mb-2">Currículo (PDF até 3MB)</label>
+                <div class="relative border-2 border-dashed border-gray-300 bg-white/40 rounded-xl p-6 text-center hover:border-[#B8E900] hover:bg-white/60 transition-all cursor-pointer group" id="dropzone">
+                <input type="file" id="arquivo" name="arquivo" accept=".pdf" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                <div class="flex flex-col items-center pointer-events-none relative z-0">
+                    <svg class="w-8 h-8 text-gray-400 group-hover:text-[#B8E900] transition-colors mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                    <p class="text-gray-500 text-sm"><span class="text-[#8bb300] font-bold">Clique para enviar</span> ou arraste</p>
+                    <p class="text-gray-400 text-xs mt-1 font-medium" id="fileName">Nenhum arquivo selecionado</p>
+                </div>
+                </div>
             </div>
-          </div>
 
-          <div class="grid md:grid-cols-2 gap-6">
             <div>
-              <label for="telefone" class="block text-sm font-bold text-gray-300 mb-2">WhatsApp / Telefone</label>
-              <input type="tel" id="telefone" name="telefone" required class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="(00) 00000-0000" />
+                <label for="mensagem" class="block text-sm font-bold text-gray-700 mb-2">Mensagem (Opcional)</label>
+                <textarea id="mensagem" name="mensagem" rows="3" class="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] focus:bg-white outline-none transition-all placeholder-gray-400 shadow-sm resize-none" placeholder="Conte um pouco sobre você..."></textarea>
             </div>
 
-            <div>
-              <label for="vaga" class="block text-sm font-bold text-gray-300 mb-2">Área de Interesse</label>
-              <select id="vaga" name="vaga" class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all">
-                <option value="Produção">Produção / Fábrica</option>
-                <option value="Administrativo">Administrativo / RH</option>
-                <option value="Comercial">Vendas / Comercial</option>
-                <option value="Design">Design / Pré-impressão</option>
-                <option value="Logistica">Logística / Expedição</option>
-                <option value="Outros">Outros</option>
-              </select>
+            <button type="submit" id="submitBtn" class="w-full bg-[#B8E900] hover:bg-[#a3cf00] text-black font-bold py-3.5 rounded-xl transition-all transform hover:-translate-y-1 shadow-lg shadow-[#B8E900]/20 flex items-center justify-center gap-2 text-base mt-2">
+                <span>Enviar Currículo</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+
+            <div id="statusMessage" class="hidden p-4 rounded-xl text-center text-sm font-bold"></div>
+
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-gray-200/60">
+                <p class="text-center text-gray-500 text-sm font-medium mb-4">Dúvidas? Fale com nosso RH:</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+                    
+                    <a href={`https://api.whatsapp.com/send?phone=${contatoRH.whatsapp}`} target="_blank" class="flex items-center gap-2 text-gray-700 hover:text-[#25D366] transition-colors group bg-white/50 px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-transparent hover:border-[#25D366]/30">
+                        <svg class="w-5 h-5 text-gray-500 group-hover:text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                        <span class="font-bold text-sm">{contatoRH.whatsappDisplay}</span>
+                    </a>
+
+                    <a href={`mailto:${contatoRH.email}`} class="flex items-center gap-2 text-gray-700 hover:text-[#B8E900] transition-colors group bg-white/50 px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-transparent hover:border-[#B8E900]/30">
+                        <svg class="w-5 h-5 text-gray-500 group-hover:text-[#B8E900]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span class="font-bold text-sm">{contatoRH.email}</span>
+                    </a>
+
+                </div>
             </div>
-          </div>
 
-          <div>
-            <label class="block text-sm font-bold text-gray-300 mb-2">Currículo (PDF até 3MB)</label>
-            <div class="relative border-2 border-dashed border-gray-700 rounded-xl p-8 text-center hover:border-[#B8E900] transition-colors cursor-pointer" id="dropzone">
-              <input type="file" id="arquivo" name="arquivo" accept=".pdf" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-              <div class="flex flex-col items-center pointer-events-none">
-                <svg class="w-10 h-10 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                <p class="text-gray-400 text-sm"><span class="text-[#B8E900] font-bold">Clique para enviar</span> ou arraste o arquivo aqui</p>
-                <p class="text-gray-600 text-xs mt-2" id="fileName">Nenhum arquivo selecionado</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label for="mensagem" class="block text-sm font-bold text-gray-300 mb-2">Mensagem (Opcional)</label>
-            <textarea id="mensagem" name="mensagem" rows="3" class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="Conte um pouco sobre você..."></textarea>
-          </div>
-
-          <button type="submit" id="submitBtn" class="w-full bg-[#B8E900] hover:bg-[#a3cf00] text-black font-bold py-4 rounded-xl transition-all transform hover:-translate-y-1 shadow-lg shadow-[#B8E900]/20 flex items-center justify-center gap-2">
-            <span>Enviar Currículo</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </button>
-
-          <div id="statusMessage" class="hidden p-4 rounded-xl text-center text-sm font-bold"></div>
-
-        </form>
+        </div>
       </div>
     </div>
   </main>
@@ -92,11 +130,9 @@ import Layout from '../layouts/Layout.astro';
   const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
   const statusMessage = document.getElementById('statusMessage');
 
-  // Mostrar nome do arquivo selecionado
   fileInput?.addEventListener('change', () => {
     if (fileInput.files && fileInput.files[0]) {
       const file = fileInput.files[0];
-      // Validação Extra no Front (Tamanho < 3MB)
       if (file.size > 3 * 1024 * 1024) {
         alert("O arquivo é muito grande. O limite é 3MB.");
         fileInput.value = "";
@@ -107,11 +143,9 @@ import Layout from '../layouts/Layout.astro';
     }
   });
 
-  // Envio do Formulário via AJAX
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // UI de Carregamento
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...`;
@@ -127,11 +161,10 @@ import Layout from '../layouts/Layout.astro';
       const result = await response.json();
 
       if (response.ok) {
-        // Sucesso
         if (statusMessage) {
             statusMessage.innerText = "Currículo enviado com sucesso! Boa sorte.";
-            statusMessage.classList.remove('hidden', 'bg-red-500/20', 'text-red-400');
-            statusMessage.classList.add('block', 'bg-green-500/20', 'text-green-400');
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+            statusMessage.classList.add('block', 'bg-green-100', 'text-green-700'); // Cores claras para sucesso
         }
         form.reset();
         if (fileNameDisplay) fileNameDisplay.innerText = "Nenhum arquivo selecionado";
@@ -139,11 +172,10 @@ import Layout from '../layouts/Layout.astro';
         throw new Error(result.message || "Erro ao enviar.");
       }
     } catch (error) {
-      // Erro
       if (statusMessage) {
           statusMessage.innerText = "Erro: " + (error instanceof Error ? error.message : "Tente novamente mais tarde.");
-          statusMessage.classList.remove('hidden', 'bg-green-500/20', 'text-green-400');
-          statusMessage.classList.add('block', 'bg-red-500/20', 'text-red-400');
+          statusMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+          statusMessage.classList.add('block', 'bg-red-100', 'text-red-700'); // Cores claras para erro
       }
     } finally {
       submitBtn.disabled = false;

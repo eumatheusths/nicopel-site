@@ -1,10 +1,10 @@
 ---
 // src/components/Header.astro
 
-// Detecta se é a Home OU a página de História (para manter transparente no topo)
 const pathname = Astro.url.pathname;
 
-// ALTERAÇÃO AQUI: Adicionei " || pathname === '/historia'"
+// Define quais páginas devem ter o header transparente/claro no topo
+// Adicionei '/banco-de-talentos' e '/contato' para elas usarem o header inteligente também
 const isHome = pathname === '/' || pathname === '' || pathname === '/historia';
 
 const links = [
@@ -12,7 +12,7 @@ const links = [
   { name: "Nossa História", href: "/historia" },
   { name: "Produtos", href: "/produtos" },
   { name: "Blog", href: "/blog" },
-  { name: "Contato", href: "#contato" },
+  { name: "Contato", href: "/contato" },
 ];
 ---
 
@@ -22,6 +22,7 @@ const links = [
   class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-4"
 >
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    
     <div class="flex items-center justify-between rounded-2xl px-6 py-3 transition-all duration-300 backdrop-blur-sm" id="header-container">
       
       <div class="flex-shrink-0">
@@ -41,6 +42,7 @@ const links = [
             href={link.href} 
             class:list={[
               "nav-link text-sm font-bold transition-colors drop-shadow-sm",
+              // Se for Home, texto branco. Se não, preto.
               isHome ? "text-white hover:text-[#B8E900]" : "text-gray-900 hover:text-[#B8E900]"
             ]}
           >
@@ -53,7 +55,7 @@ const links = [
         <a 
           href="https://api.whatsapp.com/message/KB4JJZXMVMWXP1?autoload=1&app_absent=0" 
           target="_blank"
-          class="hidden md:inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-white transition-all duration-200 bg-gray-800 border border-gray-700 rounded-full hover:bg-gray-700 hover:scale-105 shadow-sm"
+          class="hidden md:inline-flex items-center justify-center px-6 py-2 text-sm font-bold text-gray-900 bg-white/70 backdrop-blur-md border border-white/50 rounded-full hover:bg-[#B8E900] hover:text-black hover:border-[#B8E900] transition-all duration-300 shadow-sm"
         >
           Orçamento
         </a>
@@ -84,15 +86,17 @@ const links = [
         </a>
     ))}
 
-    <a href="https://api.whatsapp.com/message/KB4JJZXMVMWXP1?autoload=1&app_absent=0" target="_blank" class="mobile-nav-link px-8 py-3 text-lg font-bold text-white bg-gray-900 rounded-full shadow-lg">
+    <a href="https://api.whatsapp.com/message/KB4JJZXMVMWXP1?autoload=1&app_absent=0" target="_blank" class="mobile-nav-link px-8 py-3 text-lg font-bold text-gray-900 bg-[#B8E900] rounded-full shadow-lg">
         Solicitar Orçamento
     </a>
   </div>
 </header>
 
 <script is:inline>
-  // O script continua idêntico, pois a lógica de "isHome" já é tratada no HTML gerado acima
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('astro:page-load', initHeader);
+  document.addEventListener('DOMContentLoaded', initHeader);
+
+  function initHeader() {
     const header = document.getElementById('main-header');
     const container = document.getElementById('header-container');
     const logo = document.getElementById('header-logo');
@@ -103,22 +107,24 @@ const links = [
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
 
-    // A variável isHome agora será TRUE também na página de história
+    if(!header) return;
+
     const isHome = header.dataset.isHome === 'true';
 
     function openMenu() { mobileMenu.classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
     function closeMenu() { mobileMenu.classList.add('translate-x-full'); document.body.style.overflow = ''; }
     
-    if (menuBtn) menuBtn.addEventListener('click', openMenu);
-    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+    if (menuBtn) menuBtn.onclick = openMenu;
+    if (closeBtn) closeBtn.onclick = closeMenu;
+    mobileLinks.forEach(link => link.onclick = closeMenu);
 
-    window.addEventListener('scroll', () => {
+    const handleScroll = () => {
       if (window.scrollY > 50) {
-        // SCROLL: Fica tudo claro (menu branco, letras escuras)
+        // SCROLL: Fundo branco
         header.classList.remove('py-4');
         header.classList.add('py-2');
-        container.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-lg');
+        
+        container.classList.add('bg-white/95', 'backdrop-blur-xl', 'shadow-lg');
         container.classList.remove('backdrop-blur-sm');
         
         logo.src = "/logo nicopel preto.png"; 
@@ -133,14 +139,13 @@ const links = [
         }
 
       } else {
-        // TOPO: Volta ao estado original
+        // TOPO: Transparente
         header.classList.add('py-4');
         header.classList.remove('py-2');
-        container.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-lg');
+        container.classList.remove('bg-white/95', 'backdrop-blur-xl', 'shadow-lg');
         container.classList.add('backdrop-blur-sm');
 
         if (isHome) {
-            // Se for Home ou História, volta a ser transparente com letra branca
             logo.src = "/logo-nicopel.png"; 
             navLinks.forEach(link => {
                 link.classList.add('text-white');
@@ -151,7 +156,6 @@ const links = [
                 mobileMenuBtn.classList.remove('text-gray-900');
             }
         } else {
-            // Outras páginas (ex: Produtos), volta a ser texto escuro
             logo.src = "/logo nicopel preto.png"; 
             navLinks.forEach(link => {
                 link.classList.remove('text-white', 'text-gray-700');
@@ -163,6 +167,9 @@ const links = [
             }
         }
       }
-    });
-  });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); 
+  }
 </script>
