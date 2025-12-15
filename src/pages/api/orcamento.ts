@@ -5,19 +5,17 @@ import nodemailer from "nodemailer";
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.formData();
   
-  // 1. Captura os Dados do Formulário
+  // 1. Dados Básicos
   const name = data.get("name") as string;
   const email = data.get("email") as string;
   const company = data.get("company") as string;
-  const phone = data.get("phone") as string;
+  const phone = data.get("phone") as string; // O formulário envia como 'phone'
   
-  // Captura os dados da calculadora (mensagem montada)
-  // Se vier vazio, tentamos pegar o campo 'message' simples
-  let message = data.get("message") as string;
-  const simpleMsg = data.get("simple_message") as string; 
-  if(!message && simpleMsg) message = simpleMsg;
+  // 2. A Mensagem (Detalhes do Produto/Calculadora)
+  // O seu script JS monta um resumo e coloca no campo 'message'
+  const message = data.get("message") as string;
 
-  // 2. Captura UTMs e Rastreamento (para o RD Station)
+  // 3. UTMs e Rastreamento (Lista Completa)
   const trackingData: any = {};
   const fields = [
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 
@@ -28,43 +26,43 @@ export const POST: APIRoute = async ({ request }) => {
       if(val) trackingData[field] = val;
   });
 
-  // Validação Básica
+  // Validação
   if (!name || !email || !phone) {
     return new Response(JSON.stringify({ message: "Dados incompletos" }), { status: 400 });
   }
 
-  // 3. CONFIGURAÇÃO DO SMTP (E-mail de Atendimento)
-  // Nota: Se não for Office365, mude o 'host' (ex: smtp.hostinger.com.br, smtp.titan.email)
+  // 4. Configuração do SMTP (Atendimento)
+  // IMPORTANTE: Se não usar Office365, altere o 'host' (ex: smtp.titan.email, smtp.hostinger.com.br)
   const transporter = nodemailer.createTransport({
     host: "smtp.office365.com", 
     port: 587,
-    secure: false, 
+    secure: false, // true para 465, false para outras portas
     auth: {
-      user: import.meta.env.SMTP_USER, // Vai ler 'atendimento@nicopel.com.br' da Vercel
+      user: import.meta.env.SMTP_USER, // Vai ler 'atendimento@nicopel.com.br'
       pass: import.meta.env.SMTP_PASS, // Vai ler a senha da Vercel
     },
     tls: { ciphers: "SSLv3", rejectUnauthorized: false }
   });
 
   try {
-    // 4. Envia o E-mail para o Comercial/Atendimento
+    // 5. Envia o E-mail Interno (Para a Nicopel)
     await transporter.sendMail({
-      from: `"Site Nicopel" <${import.meta.env.SMTP_USER}>`, // Sai do e-mail de atendimento
-      to: "atendimento@nicopel.com.br, comercial@nicopel.com.br", // Quem recebe (pode por vírgula para mais gente)
-      replyTo: email, // Quando você clicar em responder, vai para o cliente
-      subject: `[Novo Lead] ${name} - ${company || 'Site'}`,
+      from: `"Site Nicopel" <${import.meta.env.SMTP_USER}>`, // Remetente deve ser o mesmo da autenticação
+      to: "comercial@nicopel.com.br, atendimento@nicopel.com.br", // Quem recebe os leads
+      replyTo: email, // Para responder direto ao cliente
+      subject: `[Lead Site] ${name} - ${company || 'Nova Solicitação'}`,
       html: `
-        <div style="font-family: sans-serif; color: #333;">
-          <h2 style="color: #000;">Nova Solicitação de Orçamento</h2>
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
+          <h2 style="color: #B8E900; background: #000; padding: 10px; border-radius: 5px;">Nova Solicitação de Orçamento</h2>
           <p><strong>Nome:</strong> ${name}</p>
           <p><strong>Empresa:</strong> ${company}</p>
           <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Telefone/Zap:</strong> ${phone}</p>
-          <hr/>
-          <h3>Detalhes do Pedido:</h3>
-          <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace;">${message}</pre>
-          <hr/>
-          <p style="font-size: 12px; color: #666;">
+          <p><strong>WhatsApp:</strong> ${phone}</p>
+          <hr style="border: 1px solid #eee; margin: 20px 0;" />
+          <h3 style="color: #000;">Detalhes do Pedido:</h3>
+          <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #B8E900; white-space: pre-wrap;">${message || 'Nenhuma mensagem adicional.'}</div>
+          <hr style="border: 1px solid #eee; margin: 20px 0;" />
+          <p style="font-size: 12px; color: #999;">
             Origem: <strong>${trackingData.utm_source || 'Direto'}</strong> | 
             Campanha: <strong>${trackingData.utm_campaign || '-'}</strong>
           </p>
@@ -72,12 +70,12 @@ export const POST: APIRoute = async ({ request }) => {
       `
     });
 
-    // 5. Envia para o RD Station
+    // 6. Envia para o RD Station
     const rdToken = import.meta.env.RD_TOKEN;
     if (rdToken) {
         const rdPayload = {
             token_rdstation: rdToken,
-            identificador: trackingData.conversion_identifier || 'orcamento-site',
+            identificador: trackingData.conversion_identifier || 'orcamento-site-nicopel',
             email: email,
             name: name,
             company: company,
@@ -90,20 +88,21 @@ export const POST: APIRoute = async ({ request }) => {
             client_id: trackingData.gclientid,
             fbclid: trackingData.fbclid,
             gclid: trackingData.gclid,
-            mensagem_site: message
+            mensagem_site: message // Envia os detalhes do produto para o RD também
         };
 
-        await fetch('https://www.rdstation.com.br/api/1.2/conversions', {
+        // Dispara para o RD (sem travar o envio se der erro aqui)
+        fetch('https://www.rdstation.com.br/api/1.2/conversions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(rdPayload)
-        });
+        }).catch(err => console.error("Erro RD:", err));
     }
 
     return new Response(JSON.stringify({ message: "Sucesso" }), { status: 200 });
 
   } catch (error) {
-    console.error("Erro no envio:", error);
-    return new Response(JSON.stringify({ message: "Erro interno no envio de e-mail" }), { status: 500 });
+    console.error("Erro fatal no envio de email:", error);
+    return new Response(JSON.stringify({ message: "Erro ao enviar e-mail. Verifique as credenciais SMTP." }), { status: 500 });
   }
 };
