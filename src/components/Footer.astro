@@ -2,7 +2,7 @@
 // src/components/Footer.astro
 const currentYear = new Date().getFullYear();
 // Link para abrir o GPS (Google Maps externo)
-const googleMapsLink = "https://www.google.com/maps/dir//Rodovia+Carlos+João+Strass,+780+-+Jardim+Tropical,+Londrina+-+PR1";
+const googleMapsLink = "https://www.google.com/maps/place/Nicopel+Embalagens/@-23.2868426,-51.1477641,17z/data=!3m1!4b1!4m6!3m5!1s0x94eb4346c69c53b5:0x98262797c8c84b0b!8m2!3d-23.2868426!4d-51.1451892!16s%2Fg%2F11g9q6y_0l?entry=ttu";
 ---
 
 <footer class="bg-black text-white pt-16 pb-8 border-t border-[#B8E900]/20 font-sans">
@@ -56,11 +56,11 @@ const googleMapsLink = "https://www.google.com/maps/dir//Rodovia+Carlos+João+St
       <div>
         <h4 class="text-white font-bold mb-6 border-l-4 border-[#B8E900] pl-3">Onde Estamos</h4>
         
-        <div class="rounded-xl overflow-hidden border border-gray-800 mb-4 h-40 group relative">
+        <div class="rounded-xl overflow-hidden border border-gray-800 mb-4 h-48 group relative bg-[#1a1a1a]">
              <a href={googleMapsLink} target="_blank" class="absolute inset-0 z-20" aria-label="Abrir no Google Maps"></a>
              
              <iframe 
-                src="https://www.google.com/maps/dir//Rodovia+Carlos+João+Strass,+780+-+Jardim+Tropical,+Londrina+-+PR2"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3663.685984533066!2d-51.14776408442646!3d-23.28684258481954!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94eb4346c69c53b5%3A0x98262797c8c84b0b!2sNicopel%20Embalagens!5e0!3m2!1spt-BR!2sbr!4v1709500000000!5m2!1spt-BR!2sbr"
                 width="100%" 
                 height="100%" 
                 style="border:0;" 
