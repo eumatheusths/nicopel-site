@@ -1,0 +1,153 @@
+---
+// src/pages/banco-de-talentos.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Banco de Talentos - Nicopel">
+  <main class="bg-black min-h-screen pt-24 pb-12 px-4 relative overflow-hidden">
+    
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-[#B8E900]/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto relative z-10">
+      
+      <div class="text-center mb-12">
+        <span class="text-[#B8E900] font-bold tracking-widest text-sm uppercase mb-3 block">Carreiras</span>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">
+          Faça parte do nosso <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E900] to-green-500">time de sucesso.</span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+          Estamos sempre em busca de profissionais apaixonados por qualidade e inovação. Envie seu currículo e entre para o nosso banco de talentos.
+        </p>
+      </div>
+
+      <div class="bg-[#111] border border-gray-800 rounded-3xl p-8 md:p-12 shadow-2xl">
+        <form id="cvForm" class="space-y-6">
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="nome" class="block text-sm font-bold text-gray-300 mb-2">Nome Completo</label>
+              <input type="text" id="nome" name="nome" required class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="Seu nome" />
+            </div>
+            
+            <div>
+              <label for="email" class="block text-sm font-bold text-gray-300 mb-2">E-mail</label>
+              <input type="email" id="email" name="email" required class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="seu@email.com" />
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="telefone" class="block text-sm font-bold text-gray-300 mb-2">WhatsApp / Telefone</label>
+              <input type="tel" id="telefone" name="telefone" required class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="(00) 00000-0000" />
+            </div>
+
+            <div>
+              <label for="vaga" class="block text-sm font-bold text-gray-300 mb-2">Área de Interesse</label>
+              <select id="vaga" name="vaga" class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all">
+                <option value="Produção">Produção / Fábrica</option>
+                <option value="Administrativo">Administrativo / RH</option>
+                <option value="Comercial">Vendas / Comercial</option>
+                <option value="Design">Design / Pré-impressão</option>
+                <option value="Logistica">Logística / Expedição</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-2">Currículo (PDF até 3MB)</label>
+            <div class="relative border-2 border-dashed border-gray-700 rounded-xl p-8 text-center hover:border-[#B8E900] transition-colors cursor-pointer" id="dropzone">
+              <input type="file" id="arquivo" name="arquivo" accept=".pdf" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <div class="flex flex-col items-center pointer-events-none">
+                <svg class="w-10 h-10 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                <p class="text-gray-400 text-sm"><span class="text-[#B8E900] font-bold">Clique para enviar</span> ou arraste o arquivo aqui</p>
+                <p class="text-gray-600 text-xs mt-2" id="fileName">Nenhum arquivo selecionado</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="mensagem" class="block text-sm font-bold text-gray-300 mb-2">Mensagem (Opcional)</label>
+            <textarea id="mensagem" name="mensagem" rows="3" class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-[#B8E900] focus:ring-1 focus:ring-[#B8E900] outline-none transition-all placeholder-gray-600" placeholder="Conte um pouco sobre você..."></textarea>
+          </div>
+
+          <button type="submit" id="submitBtn" class="w-full bg-[#B8E900] hover:bg-[#a3cf00] text-black font-bold py-4 rounded-xl transition-all transform hover:-translate-y-1 shadow-lg shadow-[#B8E900]/20 flex items-center justify-center gap-2">
+            <span>Enviar Currículo</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+
+          <div id="statusMessage" class="hidden p-4 rounded-xl text-center text-sm font-bold"></div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const fileInput = document.getElementById('arquivo') as HTMLInputElement;
+  const fileNameDisplay = document.getElementById('fileName');
+  const form = document.getElementById('cvForm') as HTMLFormElement;
+  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+  const statusMessage = document.getElementById('statusMessage');
+
+  // Mostrar nome do arquivo selecionado
+  fileInput?.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      // Validação Extra no Front (Tamanho < 3MB)
+      if (file.size > 3 * 1024 * 1024) {
+        alert("O arquivo é muito grande. O limite é 3MB.");
+        fileInput.value = "";
+        if (fileNameDisplay) fileNameDisplay.innerText = "Nenhum arquivo selecionado";
+        return;
+      }
+      if (fileNameDisplay) fileNameDisplay.innerText = file.name;
+    }
+  });
+
+  // Envio do Formulário via AJAX
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // UI de Carregamento
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...`;
+    
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('/api/enviar-curriculo', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Sucesso
+        if (statusMessage) {
+            statusMessage.innerText = "Currículo enviado com sucesso! Boa sorte.";
+            statusMessage.classList.remove('hidden', 'bg-red-500/20', 'text-red-400');
+            statusMessage.classList.add('block', 'bg-green-500/20', 'text-green-400');
+        }
+        form.reset();
+        if (fileNameDisplay) fileNameDisplay.innerText = "Nenhum arquivo selecionado";
+      } else {
+        throw new Error(result.message || "Erro ao enviar.");
+      }
+    } catch (error) {
+      // Erro
+      if (statusMessage) {
+          statusMessage.innerText = "Erro: " + (error instanceof Error ? error.message : "Tente novamente mais tarde.");
+          statusMessage.classList.remove('hidden', 'bg-green-500/20', 'text-green-400');
+          statusMessage.classList.add('block', 'bg-red-500/20', 'text-red-400');
+      }
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
+  });
+</script>
