@@ -1,12 +1,10 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind'; // <--- Tem que ter essa linha
-
-import vercel from '@astrojs/vercel';
+import tailwind from "@astrojs/tailwind";
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
-  // <--- E essa aqui
   integrations: [tailwind()],
-
-  adapter: vercel()
+  output: 'server', // <--- ISSO É OBRIGATÓRIO PARA A API EXISTIR
+  adapter: vercel(),
 });
