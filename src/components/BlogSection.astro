@@ -1,10 +1,12 @@
 ---
 // src/components/BlogSection.astro
+import { Image } from 'astro:assets';
 import { blogPosts } from '../data/blogPosts';
 
-// ALTERAÇÃO AQUI:
-// Pega os 3 últimos posts do array (os novos) e inverte para mostrar o mais recente primeiro
 const recentPosts = blogPosts.slice(-3).reverse();
+
+// 1. Carrega as imagens automaticamente da pasta assets
+const images = import.meta.glob('../assets/*.{jpeg,jpg,png,gif,webp}', { eager: true });
 ---
 
 <section class="py-24 bg-white relative overflow-hidden" id="blog">
@@ -22,14 +24,26 @@ const recentPosts = blogPosts.slice(-3).reverse();
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {recentPosts.map((post) => (
+        {recentPosts.map((post) => {
+            // 2. Resolve a imagem baseada no nome que está no JSON
+            const imagePath = `../assets/${post.image.replace(/^\//, '')}`;
+            const postImage = images[imagePath] ? (images[imagePath] as any).default : null;
+
+            return (
             <article class="group cursor-pointer flex flex-col h-full bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
                 <a href={`/blog/${post.slug}`} class="relative h-64 overflow-hidden block">
-                    <img 
-                      src={post.image} 
-                      alt={post.title} 
-                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
+                    {postImage ? (
+                        <Image 
+                            src={postImage} 
+                            alt={post.title} 
+                            width={600}
+                            format="webp"
+                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                    ) : (
+                        <div class="absolute inset-0 w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">Sem imagem</div>
+                    )}
+                    
                     <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
                     <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold text-gray-900 z-10">
                         {post.category}
@@ -47,7 +61,8 @@ const recentPosts = blogPosts.slice(-3).reverse();
                     </a>
                 </div>
             </article>
-        ))}
+            );
+        })}
     </div>
     
     <div class="mt-8 text-center md:hidden">

@@ -1,11 +1,16 @@
 ---
 // src/components/Header.astro
+import { Image, getImage } from 'astro:assets';
+// Importação das Logos
+import logoWhiteSrc from '../assets/logo-nicopel.png';
+import logoBlackSrc from '../assets/logo nicopel preto.png';
 
 const pathname = Astro.url.pathname;
-
-// Define quais páginas devem ter o header transparente/claro no topo
-// Adicionei '/banco-de-talentos' e '/contato' para elas usarem o header inteligente também
 const isHome = pathname === '/' || pathname === '' || pathname === '/historia';
+
+// Gera as URLs otimizadas para o JS usar
+const optimizedLogoWhite = await getImage({src: logoWhiteSrc, format: 'webp'});
+const optimizedLogoBlack = await getImage({src: logoBlackSrc, format: 'webp'});
 
 const links = [
   { name: "Início", href: "/" },
@@ -28,10 +33,13 @@ const links = [
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center gap-2">
             <img 
-              src={isHome ? "/logo-nicopel.png" : "/logo nicopel preto.png"} 
+              src={isHome ? optimizedLogoWhite.src : optimizedLogoBlack.src} 
               alt="Nicopel Logo" 
               class="h-10 w-auto object-contain transition-all" 
-              id="header-logo" 
+              id="header-logo"
+              /* Passamos os caminhos otimizados para o JS ler aqui */
+              data-src-white={optimizedLogoWhite.src}
+              data-src-black={optimizedLogoBlack.src}
             />
         </a>
       </div>
@@ -42,7 +50,6 @@ const links = [
             href={link.href} 
             class:list={[
               "nav-link text-sm font-bold transition-colors drop-shadow-sm",
-              // Se for Home, texto branco. Se não, preto.
               isHome ? "text-white hover:text-[#B8E900]" : "text-gray-900 hover:text-[#B8E900]"
             ]}
           >
@@ -107,9 +114,12 @@ const links = [
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
 
-    if(!header) return;
+    if(!header || !logo) return;
 
     const isHome = header.dataset.isHome === 'true';
+    // Pega as URLs otimizadas dos atributos data-
+    const srcWhite = logo.dataset.srcWhite;
+    const srcBlack = logo.dataset.srcBlack;
 
     function openMenu() { mobileMenu.classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; }
     function closeMenu() { mobileMenu.classList.add('translate-x-full'); document.body.style.overflow = ''; }
@@ -120,14 +130,14 @@ const links = [
 
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        // SCROLL: Fundo branco
+        // SCROLL: Fundo branco, logo preta
         header.classList.remove('py-4');
         header.classList.add('py-2');
         
         container.classList.add('bg-white/95', 'backdrop-blur-xl', 'shadow-lg');
         container.classList.remove('backdrop-blur-sm');
         
-        logo.src = "/logo nicopel preto.png"; 
+        logo.src = srcBlack; 
         
         navLinks.forEach(link => {
             link.classList.remove('text-white', 'text-gray-900');
@@ -139,14 +149,14 @@ const links = [
         }
 
       } else {
-        // TOPO: Transparente
+        // TOPO
         header.classList.add('py-4');
         header.classList.remove('py-2');
         container.classList.remove('bg-white/95', 'backdrop-blur-xl', 'shadow-lg');
         container.classList.add('backdrop-blur-sm');
 
         if (isHome) {
-            logo.src = "/logo-nicopel.png"; 
+            logo.src = srcWhite; 
             navLinks.forEach(link => {
                 link.classList.add('text-white');
                 link.classList.remove('text-gray-700', 'text-gray-900');
@@ -156,7 +166,7 @@ const links = [
                 mobileMenuBtn.classList.remove('text-gray-900');
             }
         } else {
-            logo.src = "/logo nicopel preto.png"; 
+            logo.src = srcBlack; 
             navLinks.forEach(link => {
                 link.classList.remove('text-white', 'text-gray-700');
                 link.classList.add('text-gray-900');

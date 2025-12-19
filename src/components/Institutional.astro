@@ -1,12 +1,14 @@
 ---
 // src/components/Institutional.astro
+import { Image } from 'astro:assets';
+import fachadaImg from '../assets/fachada-nicopel.jpg';
 ---
 
 <section class="relative w-full py-48 flex items-center overflow-hidden">
 
   <div class="absolute inset-0 z-0">
-     <img
-        src="/fachada-nicopel.jpg"
+     <Image
+        src={fachadaImg}
         alt="Fachada do Parque Industrial Nicopel"
         class="w-full h-full object-cover scale-105"
      />

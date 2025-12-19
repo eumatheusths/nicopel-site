@@ -1,12 +1,14 @@
 ---
 // src/components/ProductsShowcase.astro
+import { Image } from 'astro:assets';
+import produtosBg from '../assets/produtos-background.jpg';
 ---
 
 <section class="relative w-full h-[720px] flex items-center justify-center overflow-hidden" id="produtos-em-cena">
   
   <div class="absolute inset-0 z-0">
-     <img 
-        src="/produtos-background.jpg" 
+     <Image 
+        src={produtosBg} 
         alt="Linha completa de embalagens Nicopel" 
         class="w-full h-full object-cover"
      />
@@ -15,7 +17,7 @@
 
   <div class="relative z-10 text-center px-4 animate-fade-in-up -mt-32 md:-mt-48">
       
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#B8E900]/20 border border-[#B8E900]/40 text-sm font-bold text-gray-500 mb-6 backdrop-blur-md shadow-lg">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#B8E900]/20 border border-[#B8E900]/40 text-sm font-bold text-white mb-6 backdrop-blur-md shadow-lg drop-shadow-md">
           <span class="w-2 h-2 rounded-full bg-[#B8E900] animate-pulse"></span>
           PORTFÓLIO COMPLETO
       </div>
@@ -34,7 +36,3 @@
   </div>
 
 </section>
-
-<style>
-  /* Estilos adicionais */
-</style>

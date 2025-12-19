@@ -1,5 +1,8 @@
 ---
 // src/components/ContactSection.astro
+import { Image } from 'astro:assets';
+// Importação da imagem otimizada
+import copoDestaqueImg from '../assets/copo-destaque.png';
 ---
 
 <section class="py-24 bg-gray-50 relative overflow-hidden" id="contato">
@@ -38,9 +41,13 @@
 
         <div class="relative mt-auto">
             <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-8 bg-black/20 blur-xl rounded-[50%]"></div>
-            <img 
-                src="/copo-destaque.png" 
+            
+            <Image 
+                src={copoDestaqueImg} 
                 alt="Copo personalizado Nicopel" 
+                width={600}
+                format="webp"
+                quality={90}
                 class="relative z-10 w-full max-w-md mx-auto lg:mx-0 drop-shadow-2xl transform hover:scale-105 transition-transform duration-500"
             />
         </div>
@@ -109,44 +116,27 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="copos" class="peer sr-only" onchange="updateFormRules('copos')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">
-                                Copos
-                            </div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Copos</div>
                         </label>
-                        
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="potes" class="peer sr-only" onchange="updateFormRules('potes')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">
-                                Potes
-                            </div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Potes</div>
                         </label>
-
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="pizza" class="peer sr-only" onchange="updateFormRules('pizza')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">
-                                Cx Pizza
-                            </div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx Pizza</div>
                         </label>
-
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="sorvete" class="peer sr-only" onchange="updateFormRules('sorvete')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">
-                                Cx Sorvete
-                            </div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx Sorvete</div>
                         </label>
-                        
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="acessorios" class="peer sr-only" onchange="updateFormRules('acessorios')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">
-                                Acessórios
-                            </div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Acessórios</div>
                         </label>
-
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="especiais" class="peer sr-only" onchange="updateFormRules('especiais')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">
-                                Projetos Especiais
-                            </div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Projetos Especifico</div>
                         </label>
                     </div>
                 </div>
@@ -206,7 +196,7 @@
 </section>
 
 <script is:inline>
-    // --- 1. LÓGICA DE ANIMAÇÃO DO TEXTO (Original) ---
+    // --- 1. LÓGICA DE ANIMAÇÃO DO TEXTO ---
     const words = ["Sorvete", "Açaí", "Pizza", "Café", "Gelato"];
     let wordIndex = 0;
     const dynamicElement = document.getElementById("dynamic-word");
@@ -269,7 +259,7 @@
         }
     }
 
-    // --- 3. LÓGICA DE RASTREAMENTO (NOVA) ---
+    // --- 3. LÓGICA DE RASTREAMENTO ---
     document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const trackingFields = [
@@ -283,11 +273,9 @@
             if (value && input) input.value = value;
         });
 
-        // Referrer (Site anterior)
         const referrerInput = document.getElementById('referrer');
         if (referrerInput && document.referrer) referrerInput.value = document.referrer;
         
-        // ClientID Google Analytics (Cookie)
         const gclientInput = document.getElementById('gclientid');
         if (gclientInput && !gclientInput.value) {
             const match = document.cookie.match(/(?:^|; )_ga=([^;]*)/);
@@ -304,7 +292,6 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // CONSTRÓI A MENSAGEM COM BASE NO QUE O CLIENTE SELECIONOU
             const produtoSel = document.querySelector('input[name="produto"]:checked')?.value || 'Não selecionado';
             const acabamentoSel = document.querySelector('input[name="acabamento"]:checked')?.value || 'Não selecionado';
             const tamanhoSel = document.getElementById('tamanho_empresa').value;
@@ -321,7 +308,6 @@
 
             document.getElementById('hidden_message').value = mensagemFinal;
 
-            // UI Loading
             const originalText = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ENVIANDO...`;
@@ -341,7 +327,6 @@
                         status.classList.add('block', 'bg-green-100', 'text-green-700', 'border-green-200');
                     }
                     form.reset();
-                    // Reseta visual da calculadora
                     document.getElementById('type-selection-area').classList.add('hidden');
                     document.getElementById('moq-display').classList.add('hidden');
                 } else {

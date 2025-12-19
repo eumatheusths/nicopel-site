@@ -1,6 +1,6 @@
 // src/data/blogPosts.js
 
-const whatsappUrl = "https://api.whatsapp.com/message/KB4JJZXMVMWXP1?autoload=1&app_absent=0";
+const whatsappUrl = "https://api.whatsapp.com/send?phone=5543999999999&text=Olá,%20vi%20o%20blog%20da%20Nicopel%20e%20gostaria%20de%20um%20orçamento."; // Substitua pelo número real da Nicopel se tiver
 
 export const blogPosts = [
     {

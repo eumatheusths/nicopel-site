@@ -1,8 +1,12 @@
 ---
 // src/pages/blog/index.astro
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import ContactSection from '../../components/ContactSection.astro';
 import { blogPosts } from '../../data/blogPosts';
+
+// 1. Carrega imagens (Note que aqui o caminho é ../../assets por estar dentro de pages/blog)
+const images = import.meta.glob('../../assets/*.{jpeg,jpg,png,gif,webp}', { eager: true });
 ---
 
 <Layout title="Blog Nicopel - Dicas e Estratégias para Embalagens">
@@ -20,14 +24,26 @@ import { blogPosts } from '../../data/blogPosts';
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {blogPosts.map((post) => (
+                {blogPosts.map((post) => {
+                    // 2. Resolve a imagem
+                    const imagePath = `../../assets/${post.image.replace(/^\//, '')}`;
+                    const postImage = images[imagePath] ? (images[imagePath] as any).default : null;
+
+                    return (
                     <article class="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 flex flex-col h-full group">
                         <a href={`/blog/${post.slug}`} class="relative h-48 bg-gray-200 overflow-hidden block">
-                             <img 
-                                src={post.image} 
-                                alt={post.title} 
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                             />
+                             {postImage ? (
+                                <Image 
+                                    src={postImage} 
+                                    alt={post.title} 
+                                    width={600}
+                                    format="webp"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                />
+                             ) : (
+                                <div class="w-full h-full flex items-center justify-center text-gray-400">Sem Imagem</div>
+                             )}
+                             
                              <div class="absolute bottom-4 left-4 bg-[#B8E900] text-black text-xs font-bold px-2 py-1 rounded-md uppercase tracking-wide">
                                 {post.category}
                              </div>
@@ -42,7 +58,8 @@ import { blogPosts } from '../../data/blogPosts';
                             </a>
                         </div>
                     </article>
-                ))}
+                    );
+                })}
             </div>
         </div>
     </section>
