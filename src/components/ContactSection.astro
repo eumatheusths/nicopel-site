@@ -18,8 +18,8 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
         </span>
         
         <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-8">
-          Pronto para tornar sua marca tão reconhecida quanto seu <br/>
-          <span id="dynamic-word" class="text-[#B8E900] drop-shadow-sm inline-block min-w-[180px] transition-opacity duration-500">Gelato</span>?
+          Hora de tornar sua marca tão marcante quanto <br/>
+          <span id="dynamic-word" class="text-[#B8E900] drop-shadow-sm inline-block min-w-[180px] transition-opacity duration-500">gelato</span>
         </h2>
 
         <div class="space-y-5 mb-12">
@@ -27,7 +27,7 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
             "Enviamos para todo Brasil",
             "Impressões personalizadas em alta qualidade",
             "Acabamento vibrante e zero mancha",
-            "Sua Marca conta uma história e gera valor",
+            "Sua marca conta uma história e gera valor",
             "Compromisso com a segurança alimentar"
           ].map((item) => (
             <div class="flex items-start">
@@ -124,11 +124,11 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
                         </label>
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="pizza" class="peer sr-only" onchange="updateFormRules('pizza')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx Pizza</div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx de Pizza</div>
                         </label>
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="sorvete" class="peer sr-only" onchange="updateFormRules('sorvete')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx Sorvete</div>
+                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx de Sorvete</div>
                         </label>
                         <label class="product-option cursor-pointer group">
                             <input type="radio" name="produto" value="acessorios" class="peer sr-only" onchange="updateFormRules('acessorios')">
@@ -197,7 +197,8 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
 
 <script is:inline>
     // --- 1. LÓGICA DE ANIMAÇÃO DO TEXTO ---
-    const words = ["Sorvete", "Açaí", "Pizza", "Café", "Gelato"];
+    // ATUALIZADO: Palavras em minúsculo conforme referência da imagem
+    const words = ["gelato", "sorvete", "açaí", "pizza", "café"];
     let wordIndex = 0;
     const dynamicElement = document.getElementById("dynamic-word");
 
