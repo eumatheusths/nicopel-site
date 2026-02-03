@@ -196,8 +196,7 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
 </section>
 
 <script is:inline>
-    // --- 1. LÓGICA DE ANIMAÇÃO DO TEXTO ---
-    // ATUALIZADO: Palavras em minúsculo conforme referência da imagem
+    // --- 1. LÓGICA DE ANIMAÇÃO DO TEXTO (MANTIDA) ---
     const words = ["gelato", "sorvete", "açaí", "pizza", "café"];
     let wordIndex = 0;
     const dynamicElement = document.getElementById("dynamic-word");
@@ -213,7 +212,7 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
         }, 2500);
     }
 
-    // --- 2. LÓGICA DO FORMULÁRIO (REGRAS DE QUANTIDADE) ---
+    // --- 2. LÓGICA DO FORMULÁRIO / REGRAS DE QUANTIDADE (MANTIDA) ---
     let currentProduct = '';
     const rules = {
         'copos': { white: 1000, custom: 6000 },
@@ -260,7 +259,7 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
         }
     }
 
-    // --- 3. LÓGICA DE RASTREAMENTO ---
+    // --- 3. LÓGICA DE RASTREAMENTO (MANTIDA) ---
     document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const trackingFields = [
@@ -276,15 +275,9 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
 
         const referrerInput = document.getElementById('referrer');
         if (referrerInput && document.referrer) referrerInput.value = document.referrer;
-        
-        const gclientInput = document.getElementById('gclientid');
-        if (gclientInput && !gclientInput.value) {
-            const match = document.cookie.match(/(?:^|; )_ga=([^;]*)/);
-            if (match) gclientInput.value = match[1];
-        }
     });
 
-    // --- 4. ENVIO DO FORMULÁRIO (INTEGRAÇÃO API) ---
+    // --- 4. ENVIO DO FORMULÁRIO (ATUALIZADA PARA PIPEFY) ---
     const form = document.getElementById('contactForm');
     const btn = document.getElementById('submitBtn');
     const status = document.getElementById('formStatus');
@@ -293,49 +286,64 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const produtoSel = document.querySelector('input[name="produto"]:checked')?.value || 'Não selecionado';
-            const acabamentoSel = document.querySelector('input[name="acabamento"]:checked')?.value || 'Não selecionado';
-            const tamanhoSel = document.getElementById('tamanho_empresa').value;
-            const cargoSel = document.getElementById('cargo').value;
-            const qtdMinima = document.getElementById('moq-value')?.innerText || '-';
-
-            const mensagemFinal = `
-                Produto: ${produtoSel}
-                Acabamento: ${acabamentoSel}
-                Qtd. Mínima Prevista: ${qtdMinima}
-                Tamanho Empresa: ${tamanhoSel}
-                Cargo: ${cargoSel}
-            `;
-
-            document.getElementById('hidden_message').value = mensagemFinal;
-
+            // UI de Carregamento
             const originalText = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ENVIANDO...`;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-black inline mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ENVIANDO...`;
 
+            // Coleta os dados brutos do formulário
             const formData = new FormData(form);
+            const rawData = Object.fromEntries(formData);
+
+            // Tratamento do Telefone (Pipefy exige +55)
+            let zap = rawData.phone.toString().replace(/\D/g, ''); // Remove tudo que não é número
+            if (zap.length > 0) {
+                if (!zap.startsWith('55') && zap.length >= 10) {
+                    zap = '55' + zap; // Adiciona DDI se faltar
+                }
+                zap = '+' + zap; // Adiciona o +
+            }
+
+            // Mapeamento: Do name="" do seu HTML -> Para o que o crm.ts espera
+            const dadosParaAPI = {
+                nome: rawData.name,         // name="name" -> nome
+                email: rawData.email,       // name="email" -> email
+                whatsapp: zap,              // name="phone" -> whatsapp (formatado)
+                empresa: rawData.company,   // name="company" -> empresa
+                cargo: rawData.cargo,       // name="cargo" -> cargo
+                tamanho: rawData.tamanho_empresa, // name="tamanho_empresa" -> tamanho
+                produto: rawData.produto,   // radio checked -> produto
+                acabamento: rawData.acabamento // radio checked -> acabamento
+            };
 
             try {
-                const response = await fetch('/api/orcamento', {
+                // Envia para nossa API criada anteriormente
+                const response = await fetch('/api/crm', {
                     method: 'POST',
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dadosParaAPI)
                 });
 
-                if (response.ok) {
+                const result = await response.json();
+
+                if (response.ok && !result.errors) {
                     if(status) {
-                        status.innerHTML = "Solicitação enviada com sucesso! <br/> Em breve nossa equipe comercial entrará em contato.";
+                        status.innerHTML = "✅ Recebemos sua solicitação! <br/> Em breve nossa equipe entrará em contato.";
                         status.classList.remove('hidden', 'bg-red-100', 'text-red-600', 'border-red-200');
                         status.classList.add('block', 'bg-green-100', 'text-green-700', 'border-green-200');
                     }
                     form.reset();
-                    document.getElementById('type-selection-area').classList.add('hidden');
-                    document.getElementById('moq-display').classList.add('hidden');
+                    // Esconde as áreas condicionais
+                    document.getElementById('type-selection-area')?.classList.add('hidden');
+                    document.getElementById('moq-display')?.classList.add('hidden');
                 } else {
-                    throw new Error('Erro no servidor');
+                    console.error("Erro Pipefy:", result);
+                    throw new Error('Erro ao criar card');
                 }
             } catch (error) {
+                console.error(error);
                 if(status) {
-                    status.innerText = "Erro ao enviar. Por favor, tente pelo WhatsApp.";
+                    status.innerText = "⚠️ Erro ao enviar. Por favor, chame no WhatsApp.";
                     status.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'border-green-200');
                     status.classList.add('block', 'bg-red-100', 'text-red-600', 'border-red-200');
                 }
