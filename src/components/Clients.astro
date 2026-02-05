@@ -2,18 +2,31 @@
 // src/components/Clients.astro
 import { Image } from 'astro:assets';
 
-// 1. Carrega as imagens
+// 1. Carrega TODAS as imagens da pasta assets que seguem o padrão
 const logosDict = import.meta.glob('../assets/logo-cliente-*.png', { eager: true });
-const clients = Object.values(logosDict);
 
-// 2. CONFIGURAÇÃO MATEMÁTICA (Igual ao seu código antigo)
-const slideWidth = 200; // Largura de cada logo (px)
-const totalLogos = clients.length; // Quantas logos tem (ex: 11)
+// 2. FILTRO: Lista exata baseada no seu print (1, 2, 3, 4, 6, 10, 11)
+// Isso garante que só estas entrem e ignora qualquer outra
+const allowedPaths = [
+  '../assets/logo-cliente-1.png',
+  '../assets/logo-cliente-2.png',
+  '../assets/logo-cliente-3.png',
+  '../assets/logo-cliente-4.png',
+  '../assets/logo-cliente-6.png',
+  '../assets/logo-cliente-10.png',
+  '../assets/logo-cliente-11.png'
+];
 
-// Largura total da pista = 200px * 11 logos * 2 (duplicata)
+// Mapeia os caminhos permitidos para buscar os objetos de imagem reais
+const clients = allowedPaths
+  .map(path => logosDict[path]) // Busca no dicionário
+  .filter(Boolean); // Remove itens undefined (caso algum arquivo da lista não exista na pasta)
+
+// 3. CONFIGURAÇÃO MATEMÁTICA
+const slideWidth = 200; 
+const totalLogos = clients.length; 
+
 const trackWidth = `${slideWidth * totalLogos * 2}px`;
-
-// Distância da animação = 200px * 11 logos (Move metade)
 const moveDistance = `-${slideWidth * totalLogos}px`;
 ---
 
