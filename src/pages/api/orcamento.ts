@@ -34,64 +34,81 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ message: "Dados incompletos" }), { status: 400 });
   }
 
-  // =================================================================================
-  // AÇÃO 1: ENVIA PARA O PIPEFY (O Código Novo)
-  // =================================================================================
-  try {
-    const clientId = import.meta.env.PIPEFY_CLIENT_ID;
-    const clientSecret = import.meta.env.PIPEFY_CLIENT_SECRET;
-    const pipeId = "306956973"; // Seu Pipe ID
+  // ... (início do arquivo igual)
 
-    if (clientId && clientSecret) {
-        // A. Autenticação (Pega o Token)
-        const authResponse = await fetch("https://app.pipefy.com/oauth/token", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
-            body: new URLSearchParams({ "grant_type": "client_credentials", "client_id": clientId, "client_secret": clientSecret })
-        });
-        const authData = await authResponse.json();
-        const pipeToken = authData.access_token;
+    // =================================================================================
+    // AÇÃO 1: ENVIA PARA O PIPEFY (MODO DEBUG)
+    // =================================================================================
+    try {
+        const clientId = import.meta.env.PIPEFY_CLIENT_ID;
+        const clientSecret = import.meta.env.PIPEFY_CLIENT_SECRET;
+        const pipeId = "306956973"; // ID Confirmado
 
-        if (pipeToken) {
-            // B. Tratamento do Telefone para o Pipefy (+55 obrigatório)
-            let phonePipe = phone.replace(/\D/g, '');
-            if (!phonePipe.startsWith('55') && phonePipe.length >= 10) phonePipe = '55' + phonePipe;
-            phonePipe = '+' + phonePipe;
-
-            // C. Mapeamento dos Campos
-            const pipeFields = [
-                { field_id: "neg_cio", value: name },
-                { field_id: "email", value: email },
-                { field_id: "telefone", value: phonePipe },
-                { field_id: "empresa", value: company },
-                { field_id: "seu_cargo", value: cargo },
-                { field_id: "copy_of_seu_cargo", value: tamanho },
-                { field_id: "copy_of_tamanho_da_empresa_n_colaboradores", value: produto },
-                { field_id: "copy_of_qual_produto_voc_precisa", value: acabamento }
-            ];
-
-            // D. Envia o Card
-            const mutation = {
-                query: `mutation CreateCard($pipeId: ID!, $fields: [FieldValueInput!]) {
-                    createCard(input: { pipe_id: $pipeId, fields_attributes: $fields }) { card { id } }
-                }`,
-                variables: { pipeId: pipeId, fields: pipeFields }
-            };
-
-            await fetch("https://api.pipefy.com/graphql", {
+        if (clientId && clientSecret) {
+            // A. Autenticação
+            const authResponse = await fetch("https://app.pipefy.com/oauth/token", {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${pipeToken}` },
-                body: JSON.stringify(mutation)
+                headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+                body: new URLSearchParams({ "grant_type": "client_credentials", "client_id": clientId, "client_secret": clientSecret })
             });
-            console.log("✅ Sucesso Pipefy");
+            const authData = await authResponse.json();
+            const pipeToken = authData.access_token;
+
+            if (pipeToken) {
+                // B. Formatação Telefone
+                let phonePipe = phone.replace(/\D/g, '');
+                if (phonePipe.length > 0) {
+                    if (!phonePipe.startsWith('55') && phonePipe.length >= 10) phonePipe = '55' + phonePipe;
+                    phonePipe = '+' + phonePipe;
+                }
+
+                // C. Mapeamento (IDs REAIS QUE VOCÊ PEGOU)
+                const pipeFields = [
+                    { field_id: "c7af3e9c-8189-4318-9a9b-9bdf9707b0db", value: name }, // Nome
+                    { field_id: "0f33f98b-b77a-4a71-bb4b-72372c57e9ee", value: email }, // Email
+                    { field_id: "5e8362f6-65ec-4566-ba99-2ccbd4c573dd", value: phonePipe }, // WhatsApp
+                    { field_id: "9f6787cc-eeaf-4db4-a95d-dd4a78e12e48", value: company }, // Empresa
+                    { field_id: "df88a5ef-71e5-4f92-8eeb-d205a396af22", value: cargo }, // Cargo
+                    { field_id: "7aa7ac84-0dc4-49a2-a2dd-b2cecc87b4c5", value: tamanho }, // Tamanho
+                    { field_id: "9cbd9506-58aa-4214-b352-9d3e25791028", value: produto }, // Produto
+                    { field_id: "735ba523-6021-428a-8584-a2d53e7cface", value: acabamento } // Acabamento
+                ];
+
+                const mutation = {
+                    query: `mutation CreateCard($pipeId: ID!, $fields: [FieldValueInput!]) {
+                        createCard(input: { pipe_id: $pipeId, fields_attributes: $fields }) { card { id title } }
+                    }`,
+                    variables: { pipeId: pipeId, fields: pipeFields }
+                };
+
+                const cardResponse = await fetch("https://api.pipefy.com/graphql", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${pipeToken}` },
+                    body: JSON.stringify(mutation)
+                });
+                
+                const cardResult = await cardResponse.json();
+
+                // === AQUI ESTÁ O SEGREDO ===
+                // Se o Pipefy der erro, vamos retornar esse erro pro navegador ver!
+                if(cardResult.errors) {
+                    console.error("ERRO DETALHADO PIPEFY:", JSON.stringify(cardResult.errors));
+                    // Retorna o erro exato para você ver no Network Tab
+                    return new Response(JSON.stringify({ 
+                        erro: "Pipefy Rejeitou", 
+                        detalhes: cardResult.errors 
+                    }), { status: 400 }); 
+                }
+                
+                console.log("✅ Sucesso Pipefy");
+            }
         }
-    } else {
-        console.error("⚠️ Credenciais Pipefy não configuradas na Vercel");
+    } catch (err: any) {
+        console.error("❌ Erro Crítico:", err);
+        return new Response(JSON.stringify({ erro: "Erro Código", detalhes: err.message }), { status: 500 });
     }
-  } catch (err) {
-      console.error("❌ Erro ao enviar para Pipefy:", err);
-      // Não damos 'throw' aqui para não impedir o envio do email se o Pipefy falhar
-  }
+
+// ... (resto do arquivo mantém igual: Email e RD)
 
   // =================================================================================
   // AÇÃO 2: ENVIA O EMAIL (Seu código original)
