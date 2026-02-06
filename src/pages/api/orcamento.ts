@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.formData();
   
-  // Extração dos Dados
+  // 1. Extração dos Dados
   const name = data.get("name") as string;
   const email = data.get("email") as string;
   const phone = data.get("phone") as string; 
@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request }) => {
   const produto = data.get("produto") as string;
   const acabamento = data.get("acabamento") as string;
 
-  // Rastreamento
+  // Rastreamento UTM
   const trackingData: any = {};
   ['utm_source', 'utm_medium', 'utm_campaign', 'gclientid', 'conversion_identifier'].forEach(field => {
       const val = data.get(field);
@@ -25,24 +25,24 @@ export const POST: APIRoute = async ({ request }) => {
   });
 
   // =================================================================================
-  // AÇÃO 1: ENVIA PARA O PIPEFY (MÉTODO TOKEN DIRETO - À PROVA DE FALHAS)
+  // AÇÃO 1: ENVIA PARA O PIPEFY (MÉTODO TOKEN DIRETO)
   // =================================================================================
-  const pipeToken = import.meta.env.PIPEFY_TOKEN; // Nova variável que criamos
-  const pipeId = "306956973"; // ID Confirmado
+  const pipeToken = import.meta.env.PIPEFY_TOKEN; // Variável nova da Vercel
+  const pipeId = "306956973"; // Seu ID confirmado
 
+  // Se não tiver token, pula o Pipefy para não travar o email
   if (!pipeToken) {
       console.error("ERRO: Falta a variável PIPEFY_TOKEN na Vercel");
-      // Não trava o site, mas avisa no log
   } else {
       try {
-          // Formata Telefone
+          // Formata Telefone (+55)
           let phonePipe = phone.replace(/\D/g, '');
           if (phonePipe.length > 0) {
               if (!phonePipe.startsWith('55') && phonePipe.length >= 10) phonePipe = '55' + phonePipe;
               phonePipe = '+' + phonePipe;
           }
 
-          // IDs EXATOS DO SEU FORMULÁRIO
+          // IDs REAIS DO SEU FORMULÁRIO (Confirmados)
           const pipeFields = [
               { field_id: "c7af3e9c-8189-4318-9a9b-9bdf9707b0db", value: name }, 
               { field_id: "0f33f98b-b77a-4a71-bb4b-72372c57e9ee", value: email },
@@ -61,20 +61,21 @@ export const POST: APIRoute = async ({ request }) => {
               variables: { pipeId: pipeId, fields: pipeFields }
           };
 
+          // Envia direto usando o Token (Sem a etapa de login que estava falhando)
           const cardResponse = await fetch("https://api.pipefy.com/graphql", {
               method: "POST",
               headers: { 
                   "Content-Type": "application/json", 
-                  "Authorization": `Bearer ${pipeToken}` // Usa o Token direto!
+                  "Authorization": `Bearer ${pipeToken}` 
               },
               body: JSON.stringify(mutation)
           });
           
           const cardResult = await cardResponse.json();
 
+          // Se o Pipefy recusar os campos, mostra o erro na tela
           if(cardResult.errors) {
               console.error("ERRO PIPEFY:", JSON.stringify(cardResult.errors));
-              // Se der erro de campo, devolve pro site mostrar
               return new Response(JSON.stringify({ erro: "Pipefy Recusou", detalhes: cardResult.errors }), { status: 400 });
           } else {
               console.log("✅ Sucesso Pipefy");
@@ -100,11 +101,13 @@ export const POST: APIRoute = async ({ request }) => {
         replyTo: email,
         subject: `[Lead Site] ${name} - ${company}`,
         html: `
-          <h3>Novo Lead do Site</h3>
-          <p>Nome: ${name}</p>
-          <p>Empresa: ${company}</p>
-          <p>Produto: ${produto}</p>
-          <p>Mensagem: ${message}</p>
+          <div style="font-family: Arial, sans-serif;">
+            <h3>Novo Lead: ${name}</h3>
+            <p><strong>Empresa:</strong> ${company}</p>
+            <p><strong>WhatsApp:</strong> ${phone}</p>
+            <p><strong>Produto:</strong> ${produto} (${acabamento})</p>
+            <p><strong>Tamanho:</strong> ${tamanho}</p>
+          </div>
         `
       });
   } catch (e) { console.error("Erro email", e); }
