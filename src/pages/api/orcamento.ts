@@ -25,7 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
   });
 
   // =================================================================================
-  // AÇÃO 1: ENVIA PARA O PIPEFY (CORREÇÃO: field_value)
+  // AÇÃO 1: ENVIA PARA O PIPEFY (IDs MAPEADOS DA SUA LISTA)
   // =================================================================================
   const pipeToken = import.meta.env.PIPEFY_TOKEN; 
   const pipeId = "306956973"; 
@@ -34,24 +34,38 @@ export const POST: APIRoute = async ({ request }) => {
       console.error("ERRO: Falta a variável PIPEFY_TOKEN na Vercel");
   } else {
       try {
-          // Formata Telefone
+          // Formata Telefone (+55)
           let phonePipe = phone.replace(/\D/g, '');
           if (phonePipe.length > 0) {
               if (!phonePipe.startsWith('55') && phonePipe.length >= 10) phonePipe = '55' + phonePipe;
               phonePipe = '+' + phonePipe;
           }
 
-          // === A CORREÇÃO ESTÁ AQUI EMBAIXO ===
-          // Mudamos de 'value' para 'field_value'
+          // === AQUI ESTÁ O MAPEAMENTO CORRETO BASEADO NA SUA LISTA ===
           const pipeFields = [
-              { field_id: "c7af3e9c-8189-4318-9a9b-9bdf9707b0db", field_value: name }, 
-              { field_id: "0f33f98b-b77a-4a71-bb4b-72372c57e9ee", field_value: email },
-              { field_id: "5e8362f6-65ec-4566-ba99-2ccbd4c573dd", field_value: phonePipe },
-              { field_id: "9f6787cc-eeaf-4db4-a95d-dd4a78e12e48", field_value: company },
-              { field_id: "df88a5ef-71e5-4f92-8eeb-d205a396af22", field_value: cargo },
-              { field_id: "7aa7ac84-0dc4-49a2-a2dd-b2cecc87b4c5", field_value: tamanho },
-              { field_id: "9cbd9506-58aa-4214-b352-9d3e25791028", field_value: produto },
-              { field_id: "735ba523-6021-428a-8584-a2d53e7cface", field_value: acabamento }
+              // Label: Nome Completo | ID: neg_cio
+              { field_id: "neg_cio", field_value: name }, 
+              
+              // Label: Email | ID: email
+              { field_id: "email", field_value: email },
+              
+              // Label: WhatsApp | ID: telefone
+              { field_id: "telefone", field_value: phonePipe },
+              
+              // Label: Nome da Empresa | ID: empresa
+              { field_id: "empresa", field_value: company },
+              
+              // Label: Seu Cargo | ID: seu_cargo
+              { field_id: "seu_cargo", field_value: cargo },
+              
+              // Label: Tamanho da Empresa | ID: copy_of_seu_cargo (Sim, é esse mesmo!)
+              { field_id: "copy_of_seu_cargo", field_value: tamanho },
+              
+              // Label: Qual produto você precisa? | ID: copy_of_tamanho_da_empresa_n_colaboradores
+              { field_id: "copy_of_tamanho_da_empresa_n_colaboradores", field_value: produto },
+              
+              // Label: Qual o acabamento? | ID: copy_of_qual_produto_voc_precisa
+              { field_id: "copy_of_qual_produto_voc_precisa", field_value: acabamento }
           ];
 
           const mutation = {
