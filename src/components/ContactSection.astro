@@ -1,7 +1,7 @@
 ---
 // src/components/ContactSection.astro
 import { Image } from 'astro:assets';
-// Importação da imagem otimizada
+// Importação da imagem (garanta que o caminho está certo)
 import copoDestaqueImg from '../assets/copo-destaque.png';
 ---
 
@@ -9,19 +9,16 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
   <div class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-[#B8E900]/30 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-    
     <div class="grid lg:grid-cols-12 gap-12 lg:gap-24 items-center">
       
       <div class="lg:col-span-5 flex flex-col">
         <span class="inline-block py-1 px-3 rounded-full bg-[#B8E900] text-black text-sm font-bold w-fit mb-6 shadow-sm">
           FALE COM NOSSO TIME
         </span>
-        
         <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-8">
           Hora de tornar sua marca tão marcante quanto <br/>
           <span id="dynamic-word" class="text-[#B8E900] drop-shadow-sm inline-block min-w-[180px] transition-opacity duration-500">gelato</span>
         </h2>
-
         <div class="space-y-5 mb-12">
           {[
             "Enviamos para todo Brasil",
@@ -38,10 +35,8 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
             </div>
           ))}
         </div>
-
         <div class="relative mt-auto">
             <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-8 bg-black/20 blur-xl rounded-[50%]"></div>
-            
             <Image 
                 src={copoDestaqueImg} 
                 alt="Copo personalizado Nicopel" 
@@ -55,47 +50,41 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
 
       <div class="lg:col-span-7">
         <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 relative overflow-hidden border border-gray-100">
-          
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">
-              Solicite seu Orçamento
-            </h3>
-            <p class="text-gray-600 mb-8">
-              Preencha seus dados corporativos e selecione o produto para ver as condições especiais.
-            </p>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Solicite seu Orçamento</h3>
+            <p class="text-gray-600 mb-8">Preencha seus dados corporativos e selecione o produto para ver as condições especiais.</p>
 
             <form id="contactForm" class="space-y-5">
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                        <input type="text" id="name" name="name" required class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] focus:border-transparent outline-none transition" placeholder="Seu nome">
+                        <input type="text" id="name" name="name" required class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] outline-none transition" placeholder="Seu nome">
                     </div>
                     <div>
                         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
-                        <input type="tel" id="phone" name="phone" required class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] focus:border-transparent outline-none transition" placeholder="(00) 00000-0000">
+                        <input type="tel" id="phone" name="phone" required class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] outline-none transition" placeholder="(00) 00000-0000">
                     </div>
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail Corporativo</label>
-                    <input type="email" id="email" name="email" required class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] focus:border-transparent outline-none transition" placeholder="seuemail@empresa.com.br">
+                    <input type="email" id="email" name="email" required class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] outline-none transition" placeholder="seuemail@empresa.com.br">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label for="company" class="block text-sm font-medium text-gray-700 mb-1">Nome da Empresa</label>
-                        <input type="text" id="company" name="company" class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] focus:border-transparent outline-none transition" placeholder="Razão Social ou Nome Fantasia">
+                        <input type="text" id="company" name="company" class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] outline-none transition" placeholder="Razão Social ou Nome Fantasia">
                     </div>
                      <div>
                         <label for="cargo" class="block text-sm font-medium text-gray-700 mb-1">Seu Cargo</label>
-                        <input type="text" id="cargo" name="cargo" class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] focus:border-transparent outline-none transition" placeholder="Ex: Comprador, Gerente...">
+                        <input type="text" id="cargo" name="cargo" class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] outline-none transition" placeholder="Ex: Comprador, Gerente...">
                     </div>
                 </div>
 
                 <div>
                     <label for="tamanho_empresa" class="block text-sm font-medium text-gray-700 mb-1">Tamanho da Empresa (Nº Colaboradores)</label>
                     <div class="relative">
-                        <select id="tamanho_empresa" name="tamanho_empresa" class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] focus:border-transparent outline-none transition appearance-none bg-white">
+                        <select id="tamanho_empresa" name="tamanho_empresa" class="w-full rounded-lg border-gray-300 border px-4 py-3 focus:ring-2 focus:ring-[#B8E900] outline-none transition appearance-none bg-white">
                             <option value="" disabled selected>Selecione uma opção</option>
                             <option value="3-50">De 3 a 50 colaboradores</option>
                             <option value="50-250">De 50 a 250 colaboradores</option>
@@ -114,30 +103,14 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-3">Qual produto você precisa?</label>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        <label class="product-option cursor-pointer group">
-                            <input type="radio" name="produto" value="copos" class="peer sr-only" onchange="updateFormRules('copos')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Copos</div>
-                        </label>
-                        <label class="product-option cursor-pointer group">
-                            <input type="radio" name="produto" value="potes" class="peer sr-only" onchange="updateFormRules('potes')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Potes</div>
-                        </label>
-                        <label class="product-option cursor-pointer group">
-                            <input type="radio" name="produto" value="pizza" class="peer sr-only" onchange="updateFormRules('pizza')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx de Pizza</div>
-                        </label>
-                        <label class="product-option cursor-pointer group">
-                            <input type="radio" name="produto" value="sorvete" class="peer sr-only" onchange="updateFormRules('sorvete')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Cx de Sorvete</div>
-                        </label>
-                        <label class="product-option cursor-pointer group">
-                            <input type="radio" name="produto" value="acessorios" class="peer sr-only" onchange="updateFormRules('acessorios')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Acessórios</div>
-                        </label>
-                        <label class="product-option cursor-pointer group">
-                            <input type="radio" name="produto" value="especiais" class="peer sr-only" onchange="updateFormRules('especiais')">
-                            <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm">Projetos Especifico</div>
-                        </label>
+                        {['copos', 'potes', 'pizza', 'sorvete', 'acessorios', 'especiais'].map((prod) => (
+                             <label class="product-option cursor-pointer group">
+                                <input type="radio" name="produto" value={prod} class="peer sr-only" onchange={`updateFormRules('${prod}')`}>
+                                <div class="p-3 border border-gray-200 rounded-lg text-center peer-checked:bg-[#B8E900] peer-checked:text-black peer-checked:border-[#B8E900] hover:border-[#B8E900] transition font-medium text-sm capitalize">
+                                    {prod === 'especiais' ? 'Projetos Espec.' : prod}
+                                </div>
+                            </label>
+                        ))}
                     </div>
                 </div>
 
@@ -168,16 +141,6 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
                 <input type="hidden" name="utm_source" id="utm_source" />
                 <input type="hidden" name="utm_medium" id="utm_medium" />
                 <input type="hidden" name="utm_campaign" id="utm_campaign" />
-                <input type="hidden" name="utm_content" id="utm_content" />
-                <input type="hidden" name="utm_term" id="utm_term" />
-                <input type="hidden" name="utm_id" id="utm_id" />
-                <input type="hidden" name="fbclid" id="fbclid" />
-                <input type="hidden" name="gclid" id="gclid" />
-                <input type="hidden" name="gclientid" id="gclientid" />
-                <input type="hidden" name="referrer" id="referrer" />
-                <input type="hidden" name="utm_referrer" id="utm_referrer" />
-                <input type="hidden" name="ga_utm" id="ga_utm" />
-                
                 <input type="hidden" name="conversion_identifier" value="orcamento-site-nicopel" />
                 <input type="hidden" name="message" id="hidden_message" />
 
@@ -196,11 +159,10 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
 </section>
 
 <script is:inline>
-    // --- 1. LÓGICA DE ANIMAÇÃO DO TEXTO (MANTIDA) ---
+    // 1. Animação Texto
     const words = ["gelato", "sorvete", "açaí", "pizza", "café"];
     let wordIndex = 0;
     const dynamicElement = document.getElementById("dynamic-word");
-
     if(dynamicElement) {
         setInterval(() => {
             dynamicElement.style.opacity = '0';
@@ -212,7 +174,7 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
         }, 2500);
     }
 
-    // --- 2. LÓGICA DO FORMULÁRIO / REGRAS DE QUANTIDADE (MANTIDA) ---
+    // 2. Lógica de Quantidades
     let currentProduct = '';
     const rules = {
         'copos': { white: 1000, custom: 6000 },
@@ -227,57 +189,33 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
         currentProduct = product;
         const typeArea = document.getElementById('type-selection-area');
         const moqDisplay = document.getElementById('moq-display');
-
-        if(typeArea) typeArea.classList.remove('hidden');
+        if(typeArea) {
+            typeArea.classList.remove('hidden');
+            typeArea.classList.remove('opacity-0');
+        }
         if(moqDisplay) moqDisplay.classList.remove('hidden');
-        setTimeout(() => {
-            if(typeArea) typeArea.classList.remove('opacity-0');
-        }, 50);
-
-        const whiteOption = document.querySelector('input[name="acabamento"][value="branco"]');
-        if(whiteOption) whiteOption.checked = true;
-
         calculateMinimum();
     }
 
     window.calculateMinimum = () => {
         if (!currentProduct) return;
         const typeInput = document.querySelector('input[name="acabamento"]:checked');
-        if(!typeInput) return;
-        
-        const type = typeInput.value;
+        const quantity = typeInput && typeInput.value === 'branco' ? rules[currentProduct].white : rules[currentProduct].custom;
         const valueElement = document.getElementById('moq-value');
-        let quantity = 0;
-        
-        if (rules[currentProduct]) {
-             if (type === 'branco') quantity = rules[currentProduct].white;
-             else quantity = rules[currentProduct].custom;
-        }
-
-        if(valueElement) {
-            valueElement.innerText = quantity.toLocaleString('pt-BR') + " unidades";
-        }
+        if(valueElement) valueElement.innerText = quantity.toLocaleString('pt-BR') + " unidades";
     }
 
-    // --- 3. LÓGICA DE RASTREAMENTO (MANTIDA) ---
+    // 3. Rastreamento UTM
     document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const trackingFields = [
-            'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 
-            'utm_id', 'fbclid', 'gclid', 'gclientid', 'utm_referrer', 'ga_utm'
-        ];
-        
-        trackingFields.forEach(field => {
-            const value = urlParams.get(field);
+        ['utm_source', 'utm_medium', 'utm_campaign'].forEach(field => {
+            const val = urlParams.get(field);
             const input = document.getElementById(field);
-            if (value && input) input.value = value;
+            if(val && input) input.value = val;
         });
-
-        const referrerInput = document.getElementById('referrer');
-        if (referrerInput && document.referrer) referrerInput.value = document.referrer;
     });
 
-    // --- 4. ENVIO DO FORMULÁRIO (ATUALIZADA PARA PIPEFY) ---
+    // 4. ENVIO DO FORMULÁRIO (CONECTADO AO ORCAMENTO.TS)
     const form = document.getElementById('contactForm');
     const btn = document.getElementById('submitBtn');
     const status = document.getElementById('formStatus');
@@ -285,67 +223,41 @@ import copoDestaqueImg from '../assets/copo-destaque.png';
     if(form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            // UI de Carregamento
             const originalText = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-black inline mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> ENVIANDO...`;
 
-            // Coleta os dados brutos do formulário
+            // Prepara a mensagem técnica
+            const produto = document.querySelector('input[name="produto"]:checked')?.value || '-';
+            const acabamento = document.querySelector('input[name="acabamento"]:checked')?.value || '-';
+            const qtd = document.getElementById('moq-value')?.innerText || '-';
+            document.getElementById('hidden_message').value = `Resumo Automático: Produto ${produto} | Acabamento ${acabamento} | Qtd Mínima: ${qtd}`;
+
             const formData = new FormData(form);
-            const rawData = Object.fromEntries(formData);
-
-            // Tratamento do Telefone (Pipefy exige +55)
-            let zap = rawData.phone.toString().replace(/\D/g, ''); // Remove tudo que não é número
-            if (zap.length > 0) {
-                if (!zap.startsWith('55') && zap.length >= 10) {
-                    zap = '55' + zap; // Adiciona DDI se faltar
-                }
-                zap = '+' + zap; // Adiciona o +
-            }
-
-            // Mapeamento: Do name="" do seu HTML -> Para o que o crm.ts espera
-            const dadosParaAPI = {
-                nome: rawData.name,         // name="name" -> nome
-                email: rawData.email,       // name="email" -> email
-                whatsapp: zap,              // name="phone" -> whatsapp (formatado)
-                empresa: rawData.company,   // name="company" -> empresa
-                cargo: rawData.cargo,       // name="cargo" -> cargo
-                tamanho: rawData.tamanho_empresa, // name="tamanho_empresa" -> tamanho
-                produto: rawData.produto,   // radio checked -> produto
-                acabamento: rawData.acabamento // radio checked -> acabamento
-            };
 
             try {
-                // Envia para nossa API criada anteriormente
-                const response = await fetch('/api/crm', {
+                // Envia para o arquivo unificado
+                const response = await fetch('/api/orcamento', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dadosParaAPI)
+                    body: formData // Envio direto do FormData (sem JSON)
                 });
 
-                const result = await response.json();
-
-                if (response.ok && !result.errors) {
+                if (response.ok) {
                     if(status) {
                         status.innerHTML = "✅ Recebemos sua solicitação! <br/> Em breve nossa equipe entrará em contato.";
-                        status.classList.remove('hidden', 'bg-red-100', 'text-red-600', 'border-red-200');
-                        status.classList.add('block', 'bg-green-100', 'text-green-700', 'border-green-200');
+                        status.className = "block mt-4 p-4 rounded-xl text-center text-sm font-bold border bg-green-100 text-green-700 border-green-200";
                     }
                     form.reset();
-                    // Esconde as áreas condicionais
                     document.getElementById('type-selection-area')?.classList.add('hidden');
                     document.getElementById('moq-display')?.classList.add('hidden');
                 } else {
-                    console.error("Erro Pipefy:", result);
-                    throw new Error('Erro ao criar card');
+                    throw new Error('Erro no servidor');
                 }
             } catch (error) {
                 console.error(error);
                 if(status) {
                     status.innerText = "⚠️ Erro ao enviar. Por favor, chame no WhatsApp.";
-                    status.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'border-green-200');
-                    status.classList.add('block', 'bg-red-100', 'text-red-600', 'border-red-200');
+                    status.className = "block mt-4 p-4 rounded-xl text-center text-sm font-bold border bg-red-100 text-red-600 border-red-200";
                 }
             } finally {
                 btn.disabled = false;
