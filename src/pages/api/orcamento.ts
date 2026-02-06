@@ -25,33 +25,33 @@ export const POST: APIRoute = async ({ request }) => {
   });
 
   // =================================================================================
-  // AÇÃO 1: ENVIA PARA O PIPEFY (MÉTODO TOKEN DIRETO)
+  // AÇÃO 1: ENVIA PARA O PIPEFY (CORREÇÃO: field_value)
   // =================================================================================
-  const pipeToken = import.meta.env.PIPEFY_TOKEN; // Variável nova da Vercel
-  const pipeId = "306956973"; // Seu ID confirmado
+  const pipeToken = import.meta.env.PIPEFY_TOKEN; 
+  const pipeId = "306956973"; 
 
-  // Se não tiver token, pula o Pipefy para não travar o email
   if (!pipeToken) {
       console.error("ERRO: Falta a variável PIPEFY_TOKEN na Vercel");
   } else {
       try {
-          // Formata Telefone (+55)
+          // Formata Telefone
           let phonePipe = phone.replace(/\D/g, '');
           if (phonePipe.length > 0) {
               if (!phonePipe.startsWith('55') && phonePipe.length >= 10) phonePipe = '55' + phonePipe;
               phonePipe = '+' + phonePipe;
           }
 
-          // IDs REAIS DO SEU FORMULÁRIO (Confirmados)
+          // === A CORREÇÃO ESTÁ AQUI EMBAIXO ===
+          // Mudamos de 'value' para 'field_value'
           const pipeFields = [
-              { field_id: "c7af3e9c-8189-4318-9a9b-9bdf9707b0db", value: name }, 
-              { field_id: "0f33f98b-b77a-4a71-bb4b-72372c57e9ee", value: email },
-              { field_id: "5e8362f6-65ec-4566-ba99-2ccbd4c573dd", value: phonePipe },
-              { field_id: "9f6787cc-eeaf-4db4-a95d-dd4a78e12e48", value: company },
-              { field_id: "df88a5ef-71e5-4f92-8eeb-d205a396af22", value: cargo },
-              { field_id: "7aa7ac84-0dc4-49a2-a2dd-b2cecc87b4c5", value: tamanho },
-              { field_id: "9cbd9506-58aa-4214-b352-9d3e25791028", value: produto },
-              { field_id: "735ba523-6021-428a-8584-a2d53e7cface", value: acabamento }
+              { field_id: "c7af3e9c-8189-4318-9a9b-9bdf9707b0db", field_value: name }, 
+              { field_id: "0f33f98b-b77a-4a71-bb4b-72372c57e9ee", field_value: email },
+              { field_id: "5e8362f6-65ec-4566-ba99-2ccbd4c573dd", field_value: phonePipe },
+              { field_id: "9f6787cc-eeaf-4db4-a95d-dd4a78e12e48", field_value: company },
+              { field_id: "df88a5ef-71e5-4f92-8eeb-d205a396af22", field_value: cargo },
+              { field_id: "7aa7ac84-0dc4-49a2-a2dd-b2cecc87b4c5", field_value: tamanho },
+              { field_id: "9cbd9506-58aa-4214-b352-9d3e25791028", field_value: produto },
+              { field_id: "735ba523-6021-428a-8584-a2d53e7cface", field_value: acabamento }
           ];
 
           const mutation = {
@@ -61,7 +61,6 @@ export const POST: APIRoute = async ({ request }) => {
               variables: { pipeId: pipeId, fields: pipeFields }
           };
 
-          // Envia direto usando o Token (Sem a etapa de login que estava falhando)
           const cardResponse = await fetch("https://api.pipefy.com/graphql", {
               method: "POST",
               headers: { 
@@ -73,7 +72,6 @@ export const POST: APIRoute = async ({ request }) => {
           
           const cardResult = await cardResponse.json();
 
-          // Se o Pipefy recusar os campos, mostra o erro na tela
           if(cardResult.errors) {
               console.error("ERRO PIPEFY:", JSON.stringify(cardResult.errors));
               return new Response(JSON.stringify({ erro: "Pipefy Recusou", detalhes: cardResult.errors }), { status: 400 });
@@ -107,6 +105,7 @@ export const POST: APIRoute = async ({ request }) => {
             <p><strong>WhatsApp:</strong> ${phone}</p>
             <p><strong>Produto:</strong> ${produto} (${acabamento})</p>
             <p><strong>Tamanho:</strong> ${tamanho}</p>
+            <p><strong>Detalhes:</strong> ${message}</p>
           </div>
         `
       });

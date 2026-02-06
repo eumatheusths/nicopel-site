@@ -38,7 +38,7 @@ export const blogPosts = [
     },
     {
       slug: "erros-comuns-delivery-embalagem",
-      title: "5 Erros de Embalagem que estão destruindo a reputação do seu Delivery",
+      title: "3 Erros de Embalagem que estão destruindo a reputação do seu Delivery",
       excerpt: "Vazamentos, temperatura errada e visual amador. Veja se você está cometendo esses pecados capitais e perdendo clientes.",
       date: "05 Dez 2025",
       category: "Dicas",
